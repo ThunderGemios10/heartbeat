@@ -388,7 +388,7 @@ videoTrackApp.directive('sidebarNav', function () {
       	else if(active=="dashboard") dashboard = "active";
       	else if(active=="newsfeed") newsfeed = "active";
         // elem.html("<div>"+attrs.active+"</div>");
-        elem.html('<div class="col-md-'+col+'"><div id="cssmenu"><ul><li class="'+userchannel+'"><a href="#!mychannel"><span>reignbert</span></a></li><li><a href="#"><span>Ranked Videos</span></a></li><li><a href="#"><span>My Tags</span></a></li><li class="last"><a href="#"><span>Contact</span></a></li></ul></div><hr/><div id="cssmenu"><ul><li><a href="#"><span>Trending</span></a></li><li class="'+newsfeed+'"><a href="#!dashboard"><span>News Feed</span></a></li><li class="last"><a href="#"><span>Followed</span></a></li></ul></div><br/></div>');        
+        elem.html('<div class="col-md-'+col+'"><div id="cssmenu"><ul><li class="'+userchannel+'"><a href="#!mychannel"><span>channel name</span></a></li><li><a href="#"><span>Ranked Videos</span></a></li><li><a href="#"><span>My Tags</span></a></li><li class="last"><a href="#"><span>Contact</span></a></li></ul></div><hr/><div id="cssmenu"><ul><li><a href="#"><span>Trending</span></a></li><li class="'+newsfeed+'"><a href="#!dashboard"><span>News Feed</span></a></li><li class="last"><a href="#"><span>Followed</span></a></li></ul></div><br/></div>');        
       }
     }
 });

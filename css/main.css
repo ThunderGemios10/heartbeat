@@ -404,6 +404,9 @@ div.uploadViewCell div {
 .has-margin {
 	margin:2px 4px 2px 4px !important;
 }
+.has-margin-left-60 {
+	margin-left:60px !important;
+}
 .tagBox {
 	background-color:#ffffff !important;
 	border-radius:0px;
@@ -802,8 +805,12 @@ html, body {
 	margin-top:5px !important;
 	margin-bottom:5px !important;
 }
-
-
+.text-ranked {
+	color:blue;
+}
+.update-feed-div{
+	min-height:50px !important;
+}
 
 
 

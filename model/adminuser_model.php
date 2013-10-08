@@ -80,7 +80,7 @@ else if(isset($request->save)){
 }
 else if(isset($request->getAuthUserByEmail)){	
 	$value = $request->email;
-	echo getAuthUserByEmail($value);
+	echo json_encode(getAuthUserByEmail($value),JSON_NUMERIC_CHECK);
 }
 mysql_error();
 ?>
