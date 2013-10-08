@@ -62,7 +62,7 @@
           </div>
           <div class="container">
                 <div class="jumbotron no-border-radius">
-                   <h1>Hello, 1223YouTubers!<a href="login.php" class="pull-right"><img src="images/googleBtn.png" width="400"></img></a></h1>
+                   <h1>Hello, 123YouTubers!<a href="login.php" class="pull-right"><img src="images/googleBtn.png" width="400"></img></a></h1>
                    <p>Welcome to the Heartbeat.TM! </p>
                    <p>The new site for You, a Dating for YouTubers!</p>             
                 </div>

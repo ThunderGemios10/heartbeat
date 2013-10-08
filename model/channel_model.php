@@ -77,6 +77,8 @@ else if(isset($request->getUserChannel)){
 	echo json_encode(getLocalChannelById($cid),JSON_NUMERIC_CHECK);
 }
 else {
+	
+
 	// $collectionChannel->remove();
 	$convertedObj = array();
 	$cursor = $collectionChannel->find();
@@ -97,6 +99,8 @@ else {
 			echo '<hr/><pre>' . print_r($doc,true) . "</pre>"; 		
 		}
 	}
+
+
 }
 
 ?>

@@ -36,4 +36,6 @@ function defaultController($scope, $rootScope, $location, sessionService, $route
 		,{sortname: 'Postdate -',sorttext:'comments.postdate.sec',reverse:false}
 	];
 	$scope.currentSort=$scope.sortBy[0];
+
+	sessionService.getCurrentChannelUsername
 }

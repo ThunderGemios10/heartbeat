@@ -1,14 +1,19 @@
 function dashboardController($scope, $routeParams, $rootScope, $http, youtubeService, DataService, sessionService, databaseService, $filter,$resource) {
 	console.log('dashboard');
+	$scope.timeago = function(dated){
+        var date = humanized_time_span(dated);
+        return date;
+    }
 	sessionService.getCurrentChannel().then(function(result){
 		$scope.channelId = result.id;
 		$scope.channelInfo_yt = result;
 		databaseService.getUserChannel($scope.channelId).then(function(result){
 			console.log(result);
 			if(result.err) {
-				youtubeService.getChannelUsername($scope.channelId).then(function(result){
-					console.log(result);
-					$scope.channelInfo_yt.channelUsername = result;
+				// youtubeService.getChannelUsername($scope.channelId).then(function(result){
+					// console.log(result);
+					// $scope.channelInfo_yt.channelUsername = result;
+					// $rootScope.channelUsername = result;
 					databaseService.saveUserChannel($scope.channelInfo_yt).then(function(result){	
 						console.log(result);
 						if(!result.err) {
@@ -16,9 +21,9 @@ function dashboardController($scope, $routeParams, $rootScope, $http, youtubeSer
 							$scope.loadFeed();
 						}
 					});
-				});
+				// });
 			}
-			else {				
+			else {
 				$scope.channelInfo = result;				
 				$scope.loadFeed();			
 			}
@@ -46,10 +51,7 @@ function dashboardController($scope, $routeParams, $rootScope, $http, youtubeSer
 								console.log(list.useremail);
 								keepGoing = false;
 								databaseService.getVideoTagsFeed(item.videoId,list.useremail).then(function(vidtags){
-									console.log(vidtags);
-									databaseService.getVideoTagsFeed(item.videoId,list.useremail).then(function(vidtags){
-
-									});
+									console.log(vidtags);									
 									item.videotags = vidtags;
 									item.groupedvideotags = {};
 									item.groupedvideotags['primary'] = [];
@@ -70,9 +72,11 @@ function dashboardController($scope, $routeParams, $rootScope, $http, youtubeSer
 											item.groupedvideotags['language'].push(tagstype);	
 										}
 									});
-									
-
-									$scope.rankedVideos.push(item);									
+									databaseService.getAuthUserByEmail(list.useremail).then(function(result){
+										item.taggerInfo = result[0];
+										$scope.rankedVideos.push(item);
+									});
+														
 								});
 							}
 						}

@@ -1,11 +1,12 @@
 <?php session_start();?>
 <div ng-hide="activeRow" class="center header"><img src="images/loading.gif"></img></div>
-<div class="container" ng-show="activeRow">
-	<div class="row pull-left">	  	  
-	   <div id="videoNode" class="row col-md-7">
+<!-- <div class="row content" ng-show="activeRow">	
+	<div class="row pull-left">	 -->  	  
+	   <div sidebar-nav active="newsfeed" col="2"></div>
+	   <div id="videoNode" class="row col-md-6">
 		<div class="videoWrapper row">
 			<!-- Copy & Pasted from YouTube -->			
-			<iframe width="600" height="349" src="http://www.youtube.com/embed/{{activeRow.videoId}}?autoplay=0&modestbranding=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen></iframe>
+			<iframe width="100%" height="100%" src="http://www.youtube.com/embed/{{activeRow.videoId}}?autoplay=0&modestbranding=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen></iframe>
 		</div>
 
 	    <div class="row boxed no-shadow has-padding redHover" ng-init="newRow.rating=[];">
@@ -155,7 +156,7 @@
 		</div>						
 	  </div>
 
-	  <div id="listNode" class="col-md-5 .has-indent">		
+	  <div id="listNode" class="col-md-4 .has-indent">		
 			<div ng-show="suggestRated">
 				<!--h5>Rated Videos</h5-->			
 				<div class="container sidebar-videos" ng-repeat="video in suggestRated">
@@ -186,8 +187,8 @@
 				<hr/>
 			</div>
 		</div>		
-	   </div>
-    </div>  
+	 <!--   </div>
+    </div>   -->
 	<script type="text/javascript">  
 		/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
 			 // required: replace example with your forum shortname

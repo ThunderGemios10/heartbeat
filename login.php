@@ -38,6 +38,13 @@ else {
 	        $_SESSION["thumbnail"] = $channelsResponse['items'][0]['snippet']['thumbnails']['default']['url'];
 	   		/**********************GET CHANNEL**************************/
 	       			
+	   		$contents = file_get_contents('https://gdata.youtube.com/feeds/api/users/'.$_SESSION['channelId'].'?alt=json');
+			$decodedContents = json_decode($contents);
+			$level1 = (array) $decodedContents->entry;
+			$level2 = (array) $level1['yt$username'];
+			$level3 = $level2['$t'];
+			$_SESSION["channelUsername"] =  $level3;
+
 			$collectionAuthuser = new MongoCollection($db, 'authuser');			
 			$cursor = $collectionAuthuser->find(array(
 				'authemail' => $useremail,
