@@ -1,6 +1,4 @@
-# Ignore compiled docs
-_gh_pages
-_site
 
 /model/connection.php
 /apirequest/include/oauth_instance.php
+/js/angular.min.js
