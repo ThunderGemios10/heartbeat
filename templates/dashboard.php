@@ -10,7 +10,8 @@
 			<div ng-show="video.videoInfo" class="container col-md-12 has-padding-vertical boxed-bottom">				
 				<div class="col-md-12 no-padding no-margin update-feed-div">
 					<div class="col-md-1 no-padding no-margin">
-						<a class="pull-left" title="Play/Rate Video!" href="#!/play/{{video.videoId}}">
+						<a class="pull-left" title="Play/Rate Video!" href="#!/play/{{video.videoId}}" >
+							<img class="img-responsive" ng-src="images/profile-default-lg.svg" width="50"></img>
 							<img class="img-responsive" ng-src="images/profile-default-lg.svg" width="50"></img>
 						</a>
 					</div>
@@ -48,20 +49,11 @@
 								<span class="no-padding-left" ng-repeat="tag in video.groupedvideotags['tags']">{{tag.prefix}} {{tag.name}}<span ng-show="video.groupedvideotags['tags'].length-1>$index">,</span></span>
 							</div>																									
 						</small>
-						
-						<!-- <small ng-hide="currentSort.sorttext==''">
-							<p>
-								<span ng-class="{videoInfo.statistics.likeCount:'label label-warning'}[currentSort.sorttext]">Likes: {{video.videoInfo.statistics.likeCount | number}}</span> | 
-								<span ng-class="{videoInfo.statistics.dislikeCount:'label label-warning'}[currentSort.sorttext]">Dislikes: {{video.videoInfo.statistics.dislikeCount | number}}</span> | 
-								<span ng-class="{videoInfo.statistics.favoriteCount:'label label-warning'}[currentSort.sorttext]">Favorites: {{video.videoInfo.statistics.favoriteCount | number}}</span> | 
-								<span ng-class="{videoInfo.statistics.commentCount:'label label-warning'}[currentSort.sorttext]">Comments: {{video.videoInfo.statistics.commentCount | number}}</span>						
-							</p>
-						</small>	 -->
+
 					</div>
 					<small class="col-md-3"></small>
 					<small class="col-md-8">
-						<p>
-							<!-- <a href="#!/play/{{video.videoId}}">Edit Tags</a>  -->
+						<p>					
 							<span class="bull">&bull;</span> {{timeago(video.tagDateModified)}}
 						</p>
 					</small>
