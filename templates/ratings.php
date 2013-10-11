@@ -17,12 +17,19 @@
 			    <input type="checkbox" ng-model="statusOnly">
 			   	Active Only
 			  </label>
+			  <!-- <label>
+			    <input type="checkbox" ng-model="hideLanguage" ng-change="filterLanguage()">
+			    Hide Language Tags
+			  </label> -->
 			<br/>
+			<!-- {{hideLanguage}} - {{hideLanguageModel}} -->
+			<!-- {{tagStatus()}} -->
 			<div id="scrollableDivForTags" class="boxed tagsContainerSettings has-padding-sm-more-left" ng-init="filteredData=[]">									
 				<a ng-animate="'animate'" class="btn has-margin col-lg-12 has-padding-less btn-md btn-default has-margin no-border" ng-repeat="rating in filteredData = (ratingsData | filter:searchTag | filter:tagStatus() | orderBy:'name')" id="{{rating.tagId}}" href="" ng-class="{'active-yellow':activeRow.tagId==rating.tagId,'color-red':rating.status==0}" ng-click="changeSelected($index,rating)">{{rating.name}}</a>
 			</div>			
 			<hr/>
 		</div>
+		<!-- <pre>{{ratingsData|json}}</pre> -->
 		<div class="container col-lg-6">
 			<div class="container">
 				<h4 class="pull-left"><span class="text-info">Heartbeat</span> Tags:</h4>
@@ -72,11 +79,11 @@
 						 	</td>
 						 	<td class="col-md-3">
 								<div ng-switch="activeRow.type">
-									<span ng-switch-when="1">Primary</span>
-									<span ng-switch-when="3">Secondary</span>
-									<span ng-switch-when="2">Optional</span>									
-									<span ng-switch-when="4">Tertiary</span>	
-									<span ng-switch-default>UnTyped</span>
+									<span ng-switch-when="1">{{tagType[0].tagTypeName}}</span>
+									<span ng-switch-when="3">{{tagType[1].tagTypeName}}</span>
+									<span ng-switch-when="2">{{tagType[2].tagTypeName}}</span>									
+									<span ng-switch-when="4">{{tagType[3].tagTypeName}}</span>	
+									<span ng-switch-default>{{tagType[4].tagTypeName}}</span>
 								</div>		
 						 	</td>
 						</tr>

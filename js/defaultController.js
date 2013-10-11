@@ -1,18 +1,20 @@
 function defaultController($scope, $rootScope, $location, sessionService, $routeParams, $http, databaseService, youtubeService, sessionService, DataService,$filter,$resource) {
 	$scope.searchDelay = function(str) {
-		$location.path("/rank/"+str);
+		$location.path("/search/"+str);
 	};
-	$scope.search = function(str) {
-		console.log(str);
-	};
+	console.log($rootScope);
+	// $scope.search = function(str) {
+	// 	console.log(str+'searchFundtion');
+	// 	// $location.path("/rank/"+str);
+	// };
 	$scope.$on('$routeChangeSuccess', function () {
 		var path = $location.path();
-		if(path=='/rank' || path=='/rank/'){
+		if(path=='/search' || path=='/search/'){
 			$scope.keyword=="";
 		}
 	});
 
-	console.log($rootScope.channelPhoto);
+	// console.log($rootScope.channelPhoto);
 	
 	$rootScope.page = "home";
 	$scope.page = $rootScope.page;
@@ -37,5 +39,8 @@ function defaultController($scope, $rootScope, $location, sessionService, $route
 	];
 	$scope.currentSort=$scope.sortBy[0];
 
-	sessionService.getCurrentChannelUsername
+	sessionService.getByKey('channelUsername').then(function(result){
+		console.log('channelUsername');
+		console.log(result);
+	});
 }

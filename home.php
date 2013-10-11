@@ -41,6 +41,7 @@ if(!(isset($_SESSION["valid"]))) {
 	<script src="js/ng-upload.js"></script>
 	<script src="js/ui-jq.js"></script>
 	<script src="js/adminController.js"></script>
+	<script src="js/groupController.js"></script>
 		
 	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="component/bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="component/bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
@@ -67,8 +68,8 @@ if(!(isset($_SESSION["valid"]))) {
 						</button>
 						<a class="navbar-brand mainlogo-container" href="#"><img src="images/heartbeat-logo.png" height="22"></img></a>
 					</div>
-					<div class="navbar-collapse collapse">
-				        <form class="navbar-form navbar-left big-search-box" role="search" id="search" ng-controller="defaultController" ng-submit="search(document.getElementById('keyword').value)">
+					<div class="navbar-collapse collapse" ng-controller="defaultController">
+				        <form class="navbar-form navbar-left big-search-box" role="search" id="search" ng-submit="search(keyword)">
 				        	<div class="form-group">
 				        		<input type="text" id="keyword" delayed-search class="form-control input-sm no-border-radius main-search" ng-change="resetPage()" placeholder="Search Video" ng-model="keyword" callback-search="searchDelay(arg)">
 				        	</div>
@@ -83,11 +84,12 @@ if(!(isset($_SESSION["valid"]))) {
 				        			<li><a href="" onClick="doSwap()" ng-show="page=='play'">Swap View</a></li>
 				        		</ul> -->
 				        	<!-- </div> -->
+				        	
 				        </form>        
 				        <ul class="nav navbar-nav navbar-right">				  
 				        	<li class="dropdown">
 				        		<a class="dropdown-toggle user-menu-dropdown" title="Click to view settings" id="dLabel" role="button" data-toggle="dropdown" data-target="" href="/page.html">
-				        			<?php echo (isset($_SESSION["userinfo"]["name"])?$_SESSION["userinfo"]["name"]:"Guest"); if(isset($_SESSION["userlevel"])) if($_SESSION["userlevel"]!="guest") echo '('.$_SESSION["userlevel"].')'; ?>
+				        			<?php echo (isset($_SESSION["userinfo"]["name"])?$_SESSION["userinfo"]["name"]:""); if(isset($_SESSION["userlevel"])) if($_SESSION["userlevel"]!="guest") echo '('.$_SESSION["userlevel"].')'; ?>
 				        			<img class="no-margin" height="30" src="<?php echo $_SESSION["thumbnail"]; ?>" alt="" class="img-thumbnail">
 				        			<span class="caret"></span>
 				        		</a>

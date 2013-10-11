@@ -54,6 +54,9 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 		else if(what=="tags"){
 			$scope.rating = null;
 		}
+		else if(what=="game"){
+			$scope.game = null;
+		}
 	}
 	sessionService.getCurrentUser().then(function(user){
 		if(user) {
@@ -93,7 +96,8 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 		var secondaryPick = $scope.secondaryPick;
 		
 		var rating = $scope.rating;			
-		var language = $scope.language;		
+		var language = $scope.language;
+		var game = $scope.game;		
 		
 		temp = [];
 		if(primaryPick) temp.push(primaryPick);
@@ -102,6 +106,9 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 			temp.push(tmp);
 		});
 		if(language) angular.forEach(language,function(tmp){
+			temp.push(tmp);
+		});
+		if(game) angular.forEach(game,function(tmp){
 			temp.push(tmp);
 		});
 		console.log(temp);
@@ -125,10 +132,34 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 				databaseService.getAllTags(3).then(function(tags){
 					$scope.secondtags = tags;			
 					databaseService.getAllTags(4).then(function(tags){
-						console.log('.getAllTags(4)');
-						console.log(tags);
-						$scope.languageTags = tags;					
-						$scope.loadVidTags();
+						// console.log('.getAllTags(4)');
+						// console.log(tags);
+						tags.splice(0, 1);
+						var topLanguages = [];
+						var topLanguagesList = [
+							'English'
+							,'Chinese'
+							,'German'							
+						];
+						angular.forEach(topLanguagesList,function(list){
+							for(var i=0;i<tags.length;i++) {
+								// console.log(tags[i]);								
+								if(tags[i].name==list) {
+									topLanguages.push(tags[i]);
+									tags.splice(i, 1);
+								}										
+							}
+						});
+						var orderedLanguage = topLanguages;
+						angular.forEach(tags,function(tag){
+							orderedLanguage.push(tag);
+						});
+						$scope.languageTags = orderedLanguage;
+						databaseService.getAllTags(5).then(function(tags){
+							tags.splice(0, 1);
+							$scope.gameslist = tags;
+							$scope.loadVidTags();
+						});						
 					});
 				});					
 			});
@@ -144,6 +175,9 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 				outDetails.rating = "";				
 				databaseService.saveVideos(outDetails,false).then(function(result){										
 					console.log('saveVideos');console.log(result);
+					databaseService.saveReferenceVideo(outDetails,'anyTV').then(function(data){
+						console.log('saveReferenceVideo');console.log(data);
+					});
 					databaseService.getVideo($routeParams.videoId).then(function(result){						
 						console.log('getVideo');console.log(result);
 						$scope.activeRow = result;
@@ -152,7 +186,8 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 			});
 		}
 	});
-	databaseService.getRatedVideo(10).then(function(video){
+	databaseService.getRatedVideo(20).then(function(video){
+		console.log('getRatedVideo');console.log(video);
 		$scope.suggestRated = video;
 	});
 	databaseService.getUnRatedVideo(5).then(function(video){		
@@ -178,6 +213,7 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 			databaseService.getVideoTags($scope.activeRow.videoId,2).then(function(vidtags){					
 				$scope.userVidTags = vidtags;
 				$scope.rating = [];	
+				// $scope.gameslist = [];	
 				// console.log('$scope.tags');
 				// console.log($scope.tags);
 				// console.log('$scope.userVidTags');
@@ -263,6 +299,40 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 							});
 						});	
 						$scope.tagReady4 = true;
+						databaseService.getVideoTags($scope.activeRow.videoId,5).then(function(vidtags){
+							console.log('$scope.activeRow.videoId,5');
+							console.log(vidtags);
+							$scope.game = [];
+							$scope.userVidGameTag = vidtags;
+							// $scope.language = vidtags;
+							angular.forEach($scope.userVidGameTag,function(vidTags){
+								var keepGoing = true;
+								angular.forEach($scope.gameslist,function(vt){
+									if(keepGoing){							
+										// console.log('1'+vt["tagId"]+" == "+vidTags["tagId"]);
+										if(vt["tagId"]==vidTags["tagId"]) {
+											var keepGoing2 = true;
+											angular.forEach(vt.intensity,function(intensity){
+												if(keepGoing2){
+													// console.log(intensity);
+													// console.log('2'+intensity.level+" == "+vidTags["tagLevel"]);
+													if(intensity.level==vidTags["tagLevel"]) {
+														vt.selectedLevel = vidTags["tagLevel"];
+														// console.log(intensity.defaultName);
+														vt.prefix = intensity.defaultName;
+														$scope.game.push(vt);
+														keepGoing = false;
+														keepGoing2 = false;
+														$scope.savingStatus = 1;
+													}
+												}
+											});														
+										}
+									}	
+								});
+							});	
+							$scope.tagReady5 = true;
+						});
 					});
 				});
 			});
@@ -318,9 +388,9 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
         }, 1500);
     }
     var count = 0;
-    $scope.$watch('[primaryPick, rating, secondaryPick, language, tagReady1, tagReady2, tagReady3, tagReady4]',function(){
+    $scope.$watch('[primaryPick, rating, secondaryPick, language, game, tagReady1, tagReady2, tagReady3, tagReady4, tagReady5]',function(){
 		console.log($scope.tagReady1+" --> "+$scope.tagReady2+" --> "+$scope.tagReady3+" --> "+$scope.tagReady4);
-		if($scope.tagReady1 && $scope.tagReady2 && $scope.tagReady3 && $scope.tagReady4) {
+		if($scope.tagReady1 && $scope.tagReady2 && $scope.tagReady3 && $scope.tagReady4 && $scope.tagReady5) {
 			if(count == 0) {
 				count = 1;
 			}

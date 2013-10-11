@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<br/>
-			<pre>{{activeRow | json}}</pre>
+			<!-- <pre>{{activeRow | json}}</pre> -->
 			<div class="container col-lg-12" ng-show="showView==true">
 				<table class="table table-bordered" ng-show="activeRow._id.$id">
 					<thead>

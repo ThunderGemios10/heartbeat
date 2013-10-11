@@ -1,4 +1,4 @@
-function dbViewController($scope, $window, $location, $rootScope, $routeParams, $http, DataService, sessionService, $filter, $resource) {
+function dbViewController($scope, $window, $location, databaseService, $rootScope, $routeParams, $http, DataService, sessionService, $filter, $resource) {
 	$scope.ytLinkVideo = DataService.ytLink_video;
 	$scope.ytLinkChannel = DataService.ytLink_channel;
 	$scope.currentPage = 1;
@@ -67,16 +67,23 @@ function dbViewController($scope, $window, $location, $rootScope, $routeParams, 
 	};
 	$scope.init = function(){
 		$scope.loadRatings();
-		$scope.db = [];				
-		$http({method: 'POST',url:'model/videorating_model_new.php',data: {all:true},headers:{'Content-Type': 'application/data'}}).success(function(dbData,status,headers,config){			
-			if(dbData.length>0) {
-				$scope.dbData = $filter('filter')(dbData,$scope.searchFor);
-				$scope.nodata = false;
-			}
-			else {
-				$scope.nodata = true;
-			}			
-		}).error(function(data,status,headers,config){});
+		$scope.db = [];	
+		databaseService.searchVideo($scope.searchFor).then(function(result){
+			console.log(result);
+			if(result.length<1) 
+				$scope.dbData = {notFound:true};
+			else 
+				$scope.dbData = result;
+		});
+		// $http({method: 'POST',url:'model/videorating_model_new.php',data: {all:true},headers:{'Content-Type': 'application/data'}}).success(function(dbData,status,headers,config){			
+		// 	if(dbData.length>0) {
+		// 		$scope.dbData = $filter('filter')(dbData,$scope.searchFor);
+		// 		$scope.nodata = false;
+		// 	}
+		// 	else {
+		// 		$scope.nodata = true;
+		// 	}
+		// }).error(function(data,status,headers,config){});
 	};	
 	$scope.init();
 }

@@ -1,4 +1,4 @@
-function settingsController($scope, $log, $modal, $routeParams, $http, youtubeService , sessionService, databaseService, $filter, $timeout) {
+function settingsController($scope, $rootScope, $log, $modal, $routeParams, $http, youtubeService , sessionService, databaseService, $filter, $timeout) {
 	$scope.rateName = "";
 	$scope.rateDesc = "";
 	$scope.ratingsData = [];
@@ -30,6 +30,7 @@ function settingsController($scope, $log, $modal, $routeParams, $http, youtubeSe
 		,{tagTypeId:3,tagTypeName:'Copyright'}
 		,{tagTypeId:2,tagTypeName:'Optional'}
 		,{tagTypeId:4,tagTypeName:'Language'}
+		,{tagTypeId:5,tagTypeName:'Games'}
 	];
 	$scope.clearField = function() {
 
@@ -42,7 +43,7 @@ function settingsController($scope, $log, $modal, $routeParams, $http, youtubeSe
 		$scope.activeRow = ratingRow;		
 		$scope.activeRow.idx = index;
 		// $scope.scrollToTag(ratingRow.tagId);
-		console.log($scope.activeRow);
+		// console.log($scope.activeRow);
 		$scope.show('view');
 	}
 	$scope.scrollToTag = function(activeId) {
@@ -53,7 +54,14 @@ function settingsController($scope, $log, $modal, $routeParams, $http, youtubeSe
 	}
 	$scope.loadRatings = function(activeId){
 		databaseService.getAllTags().then(function(tags){
-			$scope.ratingsData = tags;
+			var withOutLanguageTags = [];
+			for(var i=0;i<tags.length;i++) {
+				if(tags[i].type!="4") {
+					withOutLanguageTags.push(tags[i]);
+				}			
+			}
+			console.log(withOutLanguageTags);
+			$scope.ratingsData = withOutLanguageTags;
 			if(activeId) {
 				$scope.resetViewTo(activeId);
 				$timeout(function () {
@@ -139,13 +147,26 @@ function settingsController($scope, $log, $modal, $routeParams, $http, youtubeSe
 	$scope.$watch('[searchTag, statusOnly]',function(){
 		$scope.show("resetview");
 	},true);
-	$scope.tagStatus = function () {
-		if($scope.statusOnly) {
-
+	$scope.tagStatus = function () {		
+		if($scope.statusOnly) {		
 			return {status:1};
 		}
 		return '';
 	}
+	$scope.filterLanguage = function () {
+		// if($scope.hideLanguage) {
+		// 	$scope.hideLanguageModel = {type:4};
+		// }
+		// else {
+		// 	$scope.hideLanguageModel='';
+		// }	
+		$scope.hideLanguageModel = {type:4};	
+	}
+	$rootScope.not = function(func) {
+	    return function (item) { 
+	        return !func(item); 
+	    }
+	};
 	$scope.saveTag = function(newTag) {
 		databaseService.addSystemTag(newTag).then(function(response){
 			// $scope.ratingsData.push(newTag);
@@ -226,6 +247,7 @@ function settingsController($scope, $log, $modal, $routeParams, $http, youtubeSe
 		console.log("Saving...");
 		// console.log(uploadData);
 		var videoIds = [];
+		video = {};
 		video.ids = [];
 		video.info = [];
 		angular.forEach(uploadData,function(data){
@@ -291,11 +313,9 @@ function settingsController($scope, $log, $modal, $routeParams, $http, youtubeSe
 								}
 							}
 						});	
-						// console.log(count);
-						// console.log(detail);
-						// console.log(valid);
 						if(valid){
 							$scope.videoDetails.push(detail);
+							console.log(detail);
 						}
 					});
 					$scope.segment.push(details);
@@ -306,7 +326,7 @@ function settingsController($scope, $log, $modal, $routeParams, $http, youtubeSe
 		// console.log(trimmedIds);
 		$scope.$watch('videoDetails', function() {
 			$scope.progStatus = ($scope.segment.length/loops)*100;			
-			if($scope.progStatus==100) {				
+			if($scope.progStatus==100) {
 				console.log("final Output:");	
 				console.log($scope.videoDetails);
 				var total = $scope.videoDetails.length;				
@@ -317,8 +337,11 @@ function settingsController($scope, $log, $modal, $routeParams, $http, youtubeSe
 						count++;
 						$scope.progStatus = data;						
 					}
-				});				
-			}	
+				});
+				databaseService.saveReferenceVideo($scope.videoDetails,'anyTV').then(function(data){
+					console.log(data);
+				});
+			}			
 		}, true);
 	};
 	
@@ -332,15 +355,9 @@ function settingsController($scope, $log, $modal, $routeParams, $http, youtubeSe
 		}
 	}
 	$http({method: 'POST',url:'model/session_model.php',data: {userlevel:''},headers:{'Content-Type': 'application/data'}}).success(function(user,status,headers,config){		
-		if(user=='false') changeLocation('#pageNotFound');
+		if(user=='false') changeLocation('#!pageNotFound');
 		else {
 			$scope.loadRatings();							
 		}
 	}).error(function(data,status,headers,config){});
 };
-
-/*
-	<pre><?php var_dump($_SESSION['channelId'])?></pre>
-	<pre><?php var_dump($_SESSION["channelsResponse"])?></pre>
-	<pre><?php var_dump($_SESSION["playlistId"])?></pre>
-*/

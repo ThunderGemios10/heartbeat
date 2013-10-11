@@ -388,7 +388,6 @@ div.uploadViewCell div {
 .main-search {
 	width:380px !important;
 }
-
 .remove-padding {
 	padding:0px 0px 0px 0px;
 }
@@ -403,6 +402,8 @@ div.uploadViewCell div {
 }
 .has-margin {
 	margin:2px 4px 2px 4px !important;
+}
+.has-margin {
 }
 .has-margin-left-60 {
 	margin-left:60px !important;
@@ -811,9 +812,16 @@ html, body {
 .update-feed-div{
 	min-height:25px !important;
 }
-
-
-
+.groupBanner {
+	height:175px !important;
+	margin-bottom:30px !important;
+}
+.group-filter-menu {
+	margin-bottom:30px !important;
+}
+.group-row {
+	height:100px !important;
+}
 
 
 .dropdown-toggle:hover ,.dropdown-toggle div:hover,.dropdown-toggle ul:hover,.dropdown-toggle li a:hover{

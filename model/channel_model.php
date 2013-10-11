@@ -19,6 +19,7 @@ if(isset($_SESSION["userId"])) {
 }
 // $collectionVideo->remove();
 function insertChannel($inserts) {
+	global $userinfo;
 	global $userId;
 	global $collectionChannel;
 	global $collectionAuthuser;
@@ -39,7 +40,7 @@ function insertChannel($inserts) {
 			}
 			else {
 				try {
-					$collectionAuthuser->save(array("user"=>$userinfo,"userId"=>array($useremail)));
+					// $collectionAuthuser->save(array("user"=>$userinfo,"userId"=>array($useremail)));
 					$collectionChannel->save(array("channelInfo"=>$inserts,"users"=>array($useremail)));	
 				} catch(MongoCursorException $e) {
 				    return array('err'=>'saveFailed','msg'=>$e);
@@ -78,8 +79,10 @@ else if(isset($request->getUserChannel)){
 }
 else {
 	
-
+	$collectionChannel->remove(array('_id' => new MongoId('5254e7e1fc30e57c0e000001')));
 	// $collectionChannel->remove();
+	echo "collectionChannel";
+	echo "<hr/>";
 	$convertedObj = array();
 	$cursor = $collectionChannel->find();
 	if($cursor->getNext()) {
@@ -89,8 +92,9 @@ else {
 		}
 	}
 	echo "<hr/>";
+	echo "collectionAuthuser";
 	echo "<hr/>";
-	echo "<hr/>";
+	$collectionAuthuser->remove(array('_id' => new MongoId('5257abe4fc30e5f80d000000')));
 	$convertedObj = array();
 	$cursor = $collectionAuthuser->find();
 	if($cursor->getNext()) {

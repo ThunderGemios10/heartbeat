@@ -7,7 +7,7 @@ var videoTrackApp = angular.module('videoTracker',['ui-filter','trim-filter','te
 	when('/rank', {
       templateUrl: 'templates/db_view.php',
       controller: dbViewController }).
-	when('/rank/:keyword', {
+	when('/search/:keyword', {
       templateUrl: 'templates/db_view.php',
       controller: dbViewController }).
 	when('/play/:videoId', {
@@ -43,6 +43,9 @@ var videoTrackApp = angular.module('videoTracker',['ui-filter','trim-filter','te
 	when('/admin', {
       templateUrl: 'templates/admin.php',
       controller: adminController }). 
+	when('/network/:groupId', {
+      templateUrl: 'templates/group.php',
+      controller: groupController }). 
     otherwise({
       redirectTo: 'dashboard'});
 	  
@@ -136,7 +139,7 @@ videoTrackApp.factory('youtubeService', function($http,$q) {
         }
     };
 });
-videoTrackApp.factory('databaseService', function($http,$q) {
+videoTrackApp.factory('databaseService', function($http,$q) {	
 	return {
         saveVideos: function (values,wrapped) {
 			// console.log("Save Videos Called.");
@@ -165,6 +168,37 @@ videoTrackApp.factory('databaseService', function($http,$q) {
 					console.log("arr");					
 					deferred.resolve(data);
 				});
+			});
+			return deferred.promise;
+		}
+		,saveReferenceVideo: function(values,groupId){
+			console.log(values);			
+			var deferred = $q.defer();
+			$http.post('model/video_mongomodel.php', {insert:true,values:values,groupId:groupId}).success(function(data) {
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
+		,getGroups: function(){	
+			var deferred = $q.defer();
+			$http.post('model/groupvideo_model.php', {getAllGroups:true}).success(function(data) {
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
+		,getGroupVideo: function(groupId,filter,start,limit){
+			// console.log(filter);			
+			var deferred = $q.defer();
+			$http.post('model/groupvideo_model.php', {groupId:groupId,filter:filter,start:start,limit:limit}).success(function(data) {
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
+		,getGroupVideoCount:function(groupId) {
+			// console.log(groupId);			
+			var deferred = $q.defer();
+			$http.post('model/groupvideo_model.php', {maxcount:true,groupId:groupId}).success(function(data) {
+				deferred.resolve(data);
 			});
 			return deferred.promise;
 		}
@@ -212,16 +246,24 @@ videoTrackApp.factory('databaseService', function($http,$q) {
 			else if(type==3)  {
 				console.log(type);
 				$http.post('model/tags_model.php', {getSecondaryTagsAll:true}).success(function(data) {											
-					console.log('Get All getSecondaryTagsAll Tags');
-					console.log(data);
+					// console.log('Get All getSecondaryTagsAll Tags');
+					// console.log(data);
 					deferred.resolve(data);
 				});
 			}
 			else if(type==4)  {
 				console.log(type);
 				$http.post('model/tags_model.php', {getTertiaryTagsAll:true}).success(function(data) {											
-					console.log('Get All getSecondaryTagsAll Tags');
-					console.log(data);
+					// console.log('Get All getSecondaryTagsAll Tags');
+					// console.log(data);
+					deferred.resolve(data);
+				});
+			}
+			else if(type==5)  {
+				console.log(type);
+				$http.post('model/tags_model.php', {getGamesAll:true}).success(function(data) {											
+					// console.log('Get All getSecondaryTagsAll Tags');
+					// console.log(data);
 					deferred.resolve(data);
 				});
 			}
@@ -344,12 +386,10 @@ videoTrackApp.factory('databaseService', function($http,$q) {
 			return deferred.promise;
 		}
 		,saveUserChannel: function(row){
-			console.log('saveUserChannel');
-			console.log(row);
-			var deferred = $q.defer();						
-			$http.post('model/channel_model.php', {saveUserChannel :true, channel:row}).success(function(data) {
-				console.log('saveUserChannel');
-				// console.log(data);
+			// console.log('saveUserChannel');
+			// console.log(row);
+			var deferred = $q.defer();
+			$http.post('model/channel_model.php', {saveUserChannel :true, channel:row}).success(function(data) {			
 				deferred.resolve(data);
 			});
 			return deferred.promise;
@@ -359,6 +399,15 @@ videoTrackApp.factory('databaseService', function($http,$q) {
 			console.log(row);
 			var deferred = $q.defer();						
 			$http.post('model/channel_model.php', {saveUserChannelVideo :true, videos:row}).success(function(data) {
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
+		,searchVideo: function(keyword){
+			console.log('keyword');
+			console.log(keyword);
+			var deferred = $q.defer();						
+			$http.post('model/search_model.php', {searchVideo :true, keyword:keyword}).success(function(data) {
 				deferred.resolve(data);
 			});
 			return deferred.promise;
@@ -372,26 +421,78 @@ videoTrackApp.directive('progressBar', function() {
 		});
 	}
 });
-videoTrackApp.directive('sidebarNav', function () {
+videoTrackApp.directive('sidebarNav', ['databaseService', function (databaseService) {
     return {
-      restrict: 'A',      
-      link: function (scope, elem, attrs) {
-      	console.log();
+      restrict: 'A' 
+      ,link: function (scope, elem, attrs) {
       	var active = attrs.active;
       	var col = attrs.col;
-      	console.log(col);
+      	// console.log(col);
       	var userchannel = "";
       	var dashboard = "";
       	var newsfeed = "";
       	var current = 'active';
+      	var group_anyTV='';
+    	scope.groups = [];
+    	scope.groupsTemplate = "";
+      	databaseService.getGroups().then(function(result){
+      		// console.log('sidebarNav');
+      		scope.groups = result;
+      		// console.log(scope.groups);
+      		
+      	});
+      	// console.log(scope.getGroups());
+
       	if(active=="userchannel") userchannel = "active";
       	else if(active=="dashboard") dashboard = "active";
       	else if(active=="newsfeed") newsfeed = "active";
-        // elem.html("<div>"+attrs.active+"</div>");
-        elem.html('<div class="col-md-'+col+'"><div id="cssmenu"><ul><li class="'+userchannel+'"><a href="#!mychannel"><span>channel name</span></a></li><li><a href="#"><span>Ranked Videos</span></a></li><li><a href="#"><span>My Tags</span></a></li><li class="last"><a href="#"><span>Contact</span></a></li></ul></div><hr/><div id="cssmenu"><ul><li><a href="#"><span>Trending</span></a></li><li class="'+newsfeed+'"><a href="#!dashboard"><span>News Feed</span></a></li><li class="last"><a href="#"><span>Followed</span></a></li></ul></div><br/></div>');        
+      	else if(active=="anyTV") group_anyTV = 'active';
+  	
+      	scope.$watch('groups',function(groups){
+      		scope.groupsTemplate = "";
+      		scope.groupsTemplate += '<div id="cssmenu"><ul>';   
+	      	angular.forEach(groups,function(group){
+	      		// console.log('groupsTemplate');
+	      		scope.groupsTemplate += '<li class="last"><a href="#!network/'+group.groupId+'"><span>'+group.groupAltName+'</span></a></li>';
+	      		// console.log(scope.groupsTemplate);
+	      	});      
+	        scope.groupsTemplate += '</ul></div>';
+	        elem.html('<div class="col-md-'+col+'">'+
+	        	'<div id="cssmenu">'+
+	        		'<ul>'+
+	        			'<li class="'+userchannel+'">'+
+	        				'<a href="#!mychannel">'+
+	        					'<span>My Channel</span>'+
+	        				'</a>'+
+	        			'</li>'+
+	        			'<li class="'+newsfeed+'">'+
+	        				'<a href="#!dashboard"><span>News Feed</span></a>'+
+	        			'</li>'+
+	        			'<li>'+
+	        				'<a href="#">'+
+	        					'<span>Tags</span>'+
+	        				'</a>'+
+	        			'</li>'+
+	        			'<li class="last">'+
+	        				'<a href="#"><span>Contact</span></a>'+
+	        			'</li>'+
+	        		'</ul>'+
+	        	'</div>'+
+	        	'<hr/>'+
+	        	'<div id="cssmenu">'+
+	        		'<ul>'+
+	        			'<li><a href="#"><span>Trending</span></a></li>'+
+	        			
+	        			'<li class="last"><a href="#"><span>Followed</span></a></li>'+        			
+	        		'</ul>'+
+	        	'</div>'+
+	        	'<hr/>'+scope.groupsTemplate);
+      	},true);
+        
+		// console.log(scope.groupsTemplate);
       }
     }
-});
+}]);
 videoTrackApp.directive("divtoDisqus", function () {
 	return function (scope, element, attrs) {
 		scope.$watch(attrs.divtoDisqus, function (val) {
@@ -419,7 +520,7 @@ videoTrackApp.directive('myDirective', function () {
 				element.val(scope.myDirective);
 			});
 			// on blur, update the value in scope
-			element.bind('propertychange keyup paste', function (blurEvent) {
+			element.bind('propertychange keyup paste enter', function (blurEvent) {
 				if (element.data('old-value') != element.val()) {
 					// console.log('value changed, new value is: ' + element.val());
 					scope.$apply(function () {
@@ -485,7 +586,7 @@ videoTrackApp.directive('notification', function($timeout){
 videoTrackApp.directive("delayedSearch", ['$timeout', function($timeout) {
     return {
         restrict: "A",
-        template: '<input type="text" required callback-search="searchDelay(arg);alert();" class="span4" ng-model="keyword" ng-change="resetPage()" callback-search="searchDelay(arg)" placeholder="Search Ranked"/>',
+        template: '<input type="text" required callback-search="searchDelay(arg);" class="span4" ng-model="keyword" ng-change="resetPage()" callback-search="searchDelay(arg)" placeholder="Search Ranked"/>',
         scope: {
             ngModel : '='
 			,callback : '&callbackSearch'
@@ -503,7 +604,7 @@ videoTrackApp.directive("delayedSearch", ['$timeout', function($timeout) {
 						scope.callback({arg:keyword});
 						// scope.$apply();
                     }
-                }, 1550)
+                }, 550)
             });
         }
     }

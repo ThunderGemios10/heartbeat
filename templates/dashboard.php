@@ -10,15 +10,15 @@
 			<div ng-show="video.videoInfo" class="container col-md-12 has-padding-vertical boxed-bottom">				
 				<div class="col-md-12 no-padding no-margin update-feed-div">
 					<div class="col-md-1 no-padding no-margin">
-						<a class="pull-left" title="Play/Rate Video!" href="#!/play/{{video.videoId}}" >
-							<img class="img-responsive" ng-src="images/profile-default-lg.svg" width="50"></img>
-							<img class="img-responsive" ng-src="images/profile-default-lg.svg" width="50"></img>
+						<a class="pull-left" title="Play/Rate Video!" href="#!/play/{{video.videoId}}" ng-switch="video.taggerInfo.userinfo.id==null||video.taggerInfo.userinfo.picture==null">
+							<img class="img-responsive" ng-src="images/profile-default-lg.svg" width="50" ng-switch-when="true"></img>
+							<img class="img-responsive" ng-src="{{video.taggerInfo.userinfo.picture}}?sz=50"  ng-switch-when="false"></img>
 						</a>
 					</div>
 					<div class="col-md-11 no-padding">
 						<strong><a title="Open Video in a new tab" href="#!/play/{{video.videoId}}">{{video.taggerInfo.authname}} </a><span class="inline text-ranked"> ranked</span></strong>
 						<strong><a title="Open Video in a new tab" href="#!/play/{{video.videoId}}">{{video.videoInfo.snippet.title}}</a></strong>
-					</div>						
+					</div>
 				</div>
 				<div class="has-margin-left-60">
 					<div class="col-md-3 no-padding no-margin medium-height">
@@ -58,8 +58,9 @@
 						</p>
 					</small>
 				</div>
-			</div>
+			</div>		
 		</div>
+			<!-- <pre>{{rankedVideos | json}}</pre> -->
 	</div>
 </div>
 
