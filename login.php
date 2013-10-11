@@ -40,10 +40,10 @@ else {
 	       			
 	   		$contents = file_get_contents('https://gdata.youtube.com/feeds/api/users/'.$_SESSION['channelId'].'?alt=json');
 			$decodedContents = json_decode($contents);
-			$level1 = (array) $decodedContents->entry;
-			$level2 = (array) $level1['yt$username'];
-			$level3 = $level2['$t'];
-			$_SESSION["channelUsername"] =  $level3;
+			$_SESSION["level1"] = (array) $decodedContents->entry;
+			$_SESSION["level2"] = (array) $_SESSION["level1"]['yt$username'];
+			$_SESSION["level3"] = $_SESSION["level2"]['$t'];
+			$_SESSION["channelUsername"] =  $_SESSION["level3"];
 
 			$collectionAuthuser = new MongoCollection($db, 'authuser');			
 			$cursor = $collectionAuthuser->find(array(

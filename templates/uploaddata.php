@@ -10,45 +10,65 @@
 		//header("location: error.php");
 	}
 ?>
-<div class="container-fluid">
-	<div class="span12" ng-controller="settingsController">
-		<div class="container-fluid">
-			<h4><span class="text-info">any.TV</span> Upload Data:</h4>
-			<div class="row-fluid">
-				<form ng-upload action="model/file_upload.php" class="container-fluid span8"> 
-					<span id="fileSelect" class="btn btn-primary fileinput-button span2">
-						<i class="icon-plus icon-white"></i>
-						<span>Select CSV</span>
+<div class="container">
+	<div class="col-md-12" ng-controller="settingsController">	
+			<div class="row inline">
+				<form ng-upload action="model/file_upload.php" class="col-md-5 inline">						
+					<h4>Upload Data:</h4> 
+												
 						<input id="upload" type="file" accept = "csv/*" required name="upload"></input>						
-					</span>					
-					<span class="span4" id="fileName"></span>
-					<div id="uploadMetaDiv" class="span5 row-fluid" style="display:none;">
-						<input type="submit" class="btn span3" value="Upload" upload-submit="getCSV(content, completed)" ng-show="uploadedData.length<=0"/>
-						<a class="btn" href="" ng-show="uploadedData.length>0" ng-click="save()"><i class="icon-hdd"></i> Save to db</a>
+					
+					<!-- <span class="col-md-4" id="fileName"></span> -->
+					<div id="uploadMetaDiv" class="col-md-5 row-fluid" style="display:none;">
+						<input type="submit" value="Upload" upload-submit="getCSV(content, completed)" ng-show="uploadedData.length<=0"/>
+						<a href="" ng-show="uploadedData.length>0" ng-click="save()"><i class="glyph-icon glyph-icon-hdd"></i> Save to db</a>
 					</div>						
                 </form>
-				<input type="text" class="span4" value="Search" placeholder="Search" ng-model="uploadSearch" ng-change="resetPage()"/>
-			</div>
-		</div>
+                <div class="inline col-md-5 pull-right">
+					<input type="text" class="col-md-4 form-control input-sm" value="Search" placeholder="Search" ng-model="uploadSearch" ng-change="resetPage()"/>
+				</div>
+			</div>	
+		<!-- <pre>{{uploadedData | json}}</pre> -->
 		<span ng-show="uploadedData.length>0">No. of rows: <span class="label label-success">{{uploadedData.length | number}} - {{videoDetails.length}}</span></span>
-		<div class="container-fluid has-border remove-padding">
-			<div class="span12" ng-show="filteredUploadedData.length==0">No Data.</div>
-			<div class="row has-border-row" ng-repeat="uploadRows in (uploadTable = (unPaganated = (uploadedData | filter:uploadSearch))) | paginate:currentPage:numPerPage">
-			  <div class="span1" ng-init="currentIndex=($index+1)+((currentPage-1)*10)">					
+		<table class="table table-hover">
+			<tr ng-repeat="uploadRows in paginated = (uploadTable = (unPaganated = (uploadedData | filter:uploadSearch))) | paginate:currentPage:numPerPage">
+				<td>
+					<label class="checkbox inline" ng-init="currentIndex=($index+1)+((currentPage-1)*10)">
+					   <input type="checkbox" id="inlineCheckbox1" value="option1" ng-model="uploadedData[currentIndex-1].selected"> {{currentIndex}}
+					</label>
+				</td>
+				<td ng-repeat="upload in uploadRows.item  track by $index">
+					{{upload}}
+				</td>
+				<!-- <td>
+					<pre>{{uploadRows.item | json}}</pre>
+				</td> -->
+			</tr>
+		</table>
+		<!-- <div class="row has-border remove-padding">
+			<div class="col-md-12" ng-show="filteredUploadedData.length==0">No Data.</div>
+			<div class="row has-border-row" >
+			  <div class="col-md-1" ng-init="currentIndex=($index+1)+((currentPage-1)*10)">					
 				<label class="checkbox inline">
 				   <input type="checkbox" id="inlineCheckbox1" value="option1" ng-model="uploadedData[currentIndex-1].selected"> {{currentIndex}}
 				</label>
 			  </div>
-			  <div class="span1 uploadViewCell hideOverflow" ng-repeat="upload in uploadRows.item">
+			  <div class="col-md-3 uploadViewCell hideOverflow" ng-repeat="upload in uploadRows.item">
 				  <div title="{{upload}}">{{upload}}</div>
 			  </div>			
 			</div>			
-		</div>
+		</div> -->
 		<div class="progress" ng-class="{true:'progress-striped'}[progStatus<100]" ng-show="videoDetails.length>0" progress-bar="progStatus"></div>
 		<div class="pull-right pointer-cursor" data-pagination="" data-num-pages="numPages()" 
-				  data-current-page="currentPage" data-max-size="maxSize"  
-				  data-boundary-links="true"></div>				
-			<!--pre>{{uploadedData | json}}</pre-->
+		  data-current-page="currentPage" data-max-size="maxSize"  
+		  data-boundary-links="true"></div>				
+		<pagination 
+			total-items="paginated.length" 
+			page="currentPage" 
+			max-size="maxSize" 
+			class="pagination-small" 
+			boundary-links="true">
+		</pagination>
 	</div>
 	
 </div>

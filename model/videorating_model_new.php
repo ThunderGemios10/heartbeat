@@ -186,16 +186,16 @@ function insertVideos($inserts,$mode) {
 				$docTagsInfo["note"] = isset($doc["note"])?$doc["note"]:'';
 				$docTagsInfo["username"] = isset($doc["username"])?$doc["username"]:'';
 				$docTagsInfo["useremail"] = isset($doc["useremail"])?$doc["useremail"]:'';
-				$docTagsInfo["postdate"] = new MongoDate();
-				$docTags = array('tag'=>$docTagsInfo["rating"],'count'=>1);
+				$docTagsInfo["postdate"] = new MongoDate();				
 				if(isset($doc["rating"]))
+					// $docTags = array('tag'=>$docTagsInfo["rating"],'count'=>1);
 					if(is_array($doc["rating"])) {
 						foreach($doc["rating"] as $docRate){
 							array_push($docTagsInfo,$docRate);
 						}	
 					}
 					else {
-						array_push($docTagsInfo,$docRate);
+						array_push($docTagsInfo,$doc["rating"]);
 					}		
 			}
 			else {
@@ -204,7 +204,7 @@ function insertVideos($inserts,$mode) {
 				$docTagsInfo["username"] = isset($doc["username"])?$doc["username"]:'';
 				$docTagsInfo["useremail"] = isset($doc["useremail"])?$doc["useremail"]:'';
 				$docTagsInfo["postdate"] = new MongoDate();
-				$docTags = array('tag'=>$docTagsInfo["rating"],'count'=>1);
+				// $docTags = array('tag'=>$docTagsInfo["rating"],'count'=>1);
 			}
 			//VIDEO INFO
 
@@ -255,9 +255,8 @@ function getLocalVideos($mode,$limit) {
 		$cursor = $collectionVideo->find(array("comments"=>array('$size'=>0)),array("videoInfo"=>1,"videoId"=>1))->limit($limit);
 	}
 	else if($mode=='rated') {
-		$randNum = rand(10, $collectionVideo->count());
-		$cursor = $collectionVideo->find(array("comments"=>array('$not'=>array('$size'=>0))),array("videoInfo"=>1,"videoId"=>1))->limit($limit)->skip($randNum);
-		// $cursor = $collectionVideo->find(array("comments"=>array('$not'=>array('$size'=>0))),array("videoInfo"=>1,"videoId"=>1))->limit($limit);
+		$randNum = rand(10, ($collectionVideo->count())-$limit);		
+		$cursor = $collectionVideo->find(array(),array("videoInfo"=>1,"videoId"=>1))->limit($limit)->skip($randNum);		
 	}
 	foreach ($cursor as $doc) {
 		array_push($convertedObj,$doc);
@@ -308,26 +307,53 @@ else if(isset($request->vid)){
 	echo json_encode(getLocalVideoById($vid),JSON_NUMERIC_CHECK);
 }
 else {	
-	// echo "Collection - Videos";
+	// $searchText = isset($_GET["searchText"])?$_GET["searchText"]:'';
+	$randNum = rand(10, $collectionVideo->count());
+	echo $randNum;
+	$cursor = $collectionVideo->find(array(),array("videoInfo"=>1,"videoId"=>1))->limit(10)->skip($randNum);		
+	$convertedObj = array();
+	foreach ($cursor as $doc) {
+		array_push($convertedObj,$doc);
+		echo '<hr/><pre>' . print_r($doc,true) . "</pre>"; 		
+	}
+	echo "<hr/>";
+
+	// $regexObj = new MongoRegex("/^".$searchText."/i"); 
+	// echo "Collection - Search - \" ".$searchText." \"";
 	// $i = 1;
-	// $cursor = $collectionVideo->find();
+	// $cursor = $collectionVideo->find(array('$or'=> array(
+	// 		array("videoInfo.snippet.title"=>$regexObj)
+	// 		,array("videoInfo.snippet.description"=>$regexObj)
+	// 		,array("videoInfo.snippet.channelTitle"=>$regexObj)
+	// 	)
+	// ));
 	// $convertedObj = array();
 	// foreach ($cursor as $doc) {
 	// 	array_push($convertedObj,$doc);
 	// 	echo '<hr/>'.$i.'<pre>' . print_r($doc,true) . "</pre>"; 
 	// 	$i++;		
 	// }
-	// echo "<hr/>";
-	// echo "Collection - Authuser";
-	// $i = 1;
-	// $cursor = $collectionAuthuser->find();
-	// $convertedObj = array();
-	// foreach ($cursor as $doc) {
-	// 	array_push($convertedObj,$doc);
-	// 	echo '<hr/>'.$i.'<pre>' . print_r($doc,true) . "</pre>"; 
-	// 	$i++;		
-	// }	
-	// echo json_encode($convertedObj);
+	echo "<hr/>";
+	echo "Collection - Videos";
+	$i = 1;
+	$cursor = $collectionVideo->find();
+	$convertedObj = array();
+	foreach ($cursor as $doc) {
+		array_push($convertedObj,$doc);
+		echo '<hr/>'.$i.'<pre>' . print_r($doc,true) . "</pre>"; 
+		$i++;		
+	}
+	echo "<hr/>";
+	echo "Collection - Authuser";
+	$i = 1;
+	$cursor = $collectionAuthuser->find();
+	$convertedObj = array();
+	foreach ($cursor as $doc) {
+		array_push($convertedObj,$doc);
+		echo '<hr/>'.$i.'<pre>' . print_r($doc,true) . "</pre>"; 
+		$i++;		
+	}	
+	echo json_encode($convertedObj);
 }
 
 ?>

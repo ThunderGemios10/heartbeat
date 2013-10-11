@@ -91,7 +91,10 @@ function getTags($type){
 	$tempRow = array();
 	$tempRow["intensity"] = array();
 	$intensity = array();
-	$languageIntensity = array();	
+	$languageIntensity = array();
+	$gamesIntensity = array();
+	$skip = false;
+	$counter = 0;
 	while($row = mysql_fetch_assoc($result)){
 		if($row["tagId"]==$temp) {
 			// echo "Equals";
@@ -103,13 +106,15 @@ function getTags($type){
 			array_push($tempRow["intensity"], $intensity);
 			if($tempRow["type"]==4 && $tempRow["name"]=="Language"){			
 				array_push($languageIntensity, $intensity);
-			}			
+			}
+			else if($tempRow["type"]==5 && $tempRow["name"]=="Games"){			
+				array_push($gamesIntensity, $intensity);
+			}
 		}
 		else {
 			if(count($tempRow)>1) {
 				array_push($returnArr, $tempRow);
 			}
-			// echo "Not Equals";
 			$temp = $row["mainTagId"];
 			$tempRow = array();	
 			$tempRow["tagId"] = $row["mainTagId"];
@@ -120,8 +125,11 @@ function getTags($type){
 			$tempRow["status"] = $row["status"];
 			$tempRow["type"] = $row["type"];
 			$tempRow["intensity"] = array();
-			if($tempRow["type"]==4&&$tempRow["name"]!="Language"){				
+			if($tempRow["type"]==4&&$tempRow["name"]!="Language"){
 				$tempRow["intensity"] = $languageIntensity;
+			}
+			else if($tempRow["type"]==5&&$tempRow["name"]!="Games"){
+				$tempRow["intensity"] = $gamesIntensity;
 			}
 			else {
 				$intensity["id"] = $row["id"];
@@ -132,11 +140,14 @@ function getTags($type){
 				if($tempRow["type"]==4 && $tempRow["name"]=="Language"){
 					array_push($languageIntensity, $intensity);
 				}
+				else if($tempRow["type"]==5 && $tempRow["name"]=="Games"){
+					array_push($gamesIntensity, $intensity);
+				}
 			}
-			
-		}	
-	}
-	array_push($returnArr, $tempRow);	
+		
+		}
+	}	
+	array_push($returnArr, $tempRow);
 	return $returnArr;
 }
 function getTagsAll(){
@@ -152,6 +163,7 @@ function getTagsAll(){
 	$tempRow["intensity"] = array();
 	$intensity = array();
 	$languageIntensity = array();
+	$gamesIntensity = array();
 	while($row = mysql_fetch_assoc($result)){
 		if($row["tagId"]==$temp) {
 			// echo "Equals";
@@ -163,7 +175,10 @@ function getTagsAll(){
 			array_push($tempRow["intensity"], $intensity);
 			if($tempRow["type"]==4 && $tempRow["name"]=="Language"){			
 				array_push($languageIntensity, $intensity);
-			}			
+			}
+			else if($tempRow["type"]==5 && $tempRow["name"]=="Games"){
+				array_push($gamesIntensity, $intensity);
+			}
 		}
 		else {
 			if(count($tempRow)>1) {
@@ -183,6 +198,9 @@ function getTagsAll(){
 			if($tempRow["type"]==4&&$tempRow["name"]!="Language"){				
 				$tempRow["intensity"] = $languageIntensity;
 			}
+			else if($tempRow["type"]==5&&$tempRow["name"]!="Games"){				
+				$tempRow["intensity"] = $gamesIntensity;
+			}
 			else {
 				$intensity["id"] = $row["id"];
 				$intensity["defaultName"] = $row["defaultName"];
@@ -192,13 +210,16 @@ function getTagsAll(){
 				if($tempRow["type"]==4 && $tempRow["name"]=="Language"){
 					array_push($languageIntensity, $intensity);
 				}
+				else if($tempRow["type"]==5 && $tempRow["name"]=="Games"){
+					array_push($gamesIntensity, $intensity);
+				}
 			}
 			
 		}	
 	}
 	// var_dump($languageIntensity);
 	// var_dump($tempRow);
-	array_push($returnArr, $tempRow);	
+	array_push($returnArr, $tempRow);
 	return $returnArr;
 }
 if(isset($request->tagArr)) {
@@ -230,6 +251,9 @@ else if(isset($request->getSecondaryTagsAll)) {
 }
 else if(isset($request->getTertiaryTagsAll)) {
 	echo json_encode(getTags(4));
+}
+else if(isset($request->getGamesAll)) {
+	echo json_encode(getTags(5));
 }
 else if(isset($request->getTagsAlls)) {
 	echo json_encode(getTagsAll());

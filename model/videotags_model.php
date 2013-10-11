@@ -74,6 +74,19 @@ function getVideoTags($videoId,$type) {
 				AND type = "'.$type.'"				
 		';
 	}
+	else if($type==5){
+		$query = '
+			SELECT *,TPV.tagId primaryId 
+				FROM tbl_videoperuser VPU 
+					INNER JOIN tbl_tagspervideo TPV 
+						ON VPU.id = TPV.videoperuserId 
+					INNER JOIN tbl_tags T 
+						ON T.id = TPV.tagId					
+				WHERE videoId = "'.$videoId.'"
+				AND useremail = "'.$useremail.'"
+				AND type = "'.$type.'"
+		';
+	}
 	else if($type==0){
 		$query = '
 			SELECT *,TPV.tagId primaryId 
@@ -115,7 +128,7 @@ function getVideoTags($videoId,$type) {
 		$tempRow["tagLevel"] = $row["tagLevel"];
 		$tempRow["name"] = $row["name"];
 		$tempRow["type"] = $row["type"];		
-		if($type!=4) $tempRow["prefix"] = $row["defaultName"];
+		if($type!=4 && $type!=5) $tempRow["prefix"] = $row["defaultName"];		
 		array_push($returnArr, $tempRow);	
 	}
 	return $returnArr;

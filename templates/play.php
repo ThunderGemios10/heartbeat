@@ -2,7 +2,7 @@
 <div ng-hide="activeRow" class="center header"><img src="images/loading.gif"></img></div>
 <!-- <div class="row content" ng-show="activeRow">	
 	<div class="row pull-left">	 -->  	  
-	   <div sidebar-nav active="newsfeed" col="2"></div>
+	   <div sidebar-nav active="" col="2"></div>
 	   <div id="videoNode" class="row col-md-6">
 		<div class="videoWrapper row">
 			<!-- Copy & Pasted from YouTube -->			
@@ -95,7 +95,40 @@
 					</td>
 				</tr>
 			</table>
-			<!-- <pre>{{language | json}}</pre> -->
+			<!-- <pre>{{gameslist | json}}</pre> -->
+			<table class="table no-margin table-condensed col-md-6" ng-init="max=5;isReadonly=false;">
+				<tr class="container boxed no-shadow">
+					<td class="col-md-1 has-padding-sm">
+						<i class="glyphicon glyphicon-remove pull-left" ng-show="game" ng-click="removeTag('game')"></i>
+					</td>
+					<td class="col-md-3">
+						<div class="container has-padding-sm" ng-show="tags.length>0">
+							Games
+						</div>
+					</td>
+					<td class="col-md-8 no-padding">
+						<div class="btn-group">				
+							<div class="inline"><select data-placeholder="&raquo;" multiple class="chzn-select chzn-custom-style languageTagBox" ng-model="game" ng-options="i as i.name for i in gameslist" chosen></select></div>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<table class="table table-condensed col-md-6" ng-init="max=5;isReadonly=false;">						
+				<tr ng-repeat="newLanguage in game" class="container boxed no-shadow">
+					<td class="col-md-6">
+						<div ng-show="tags.length>0" class="has-padding-sm">
+							<a href="">{{newLanguage.prefix}} {{newLanguage.name}}</a>
+						</div>
+					</td>
+					<td class="col-md-6 no-padding">
+						<div class="btn-group side-boxed" data-toggle="buttons">
+						  <label class="btn" ng-repeat="intensities in newLanguage.intensity" ng-class="{true:'active',false:'false'}[newLanguage.selectedLevel==intensities.level]" ng-click="newLanguage.prefix=intensities.defaultName;newLanguage.selectedLevel=intensities.level">
+							<input type="radio" ng-model="pick" ng-hide="true"> {{intensities.defaultName}}</input>
+						  </label> 			  
+						</div>	
+					</td>
+				</tr>
+			</table>
 			<table class="table no-margin table-condensed col-md-6" ng-init="max=5;isReadonly=false;">
 				<tr class="container boxed no-shadow  no-margin">
 					<td class="col-md-1 has-padding-sm">
@@ -160,10 +193,10 @@
 			<div ng-show="suggestRated">
 				<!--h5>Rated Videos</h5-->			
 				<div class="container sidebar-videos" ng-repeat="video in suggestRated">
-					<div class="col-md-4">						
+					<div class="col-md-4 no-padding">						
 						<a title="Play/Rate Video!" href="#!/play/{{video.videoId}}"><img class="" ng-src="{{video.videoInfo.snippet.thumbnails.medium.url}}" width="130"></img></a>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-7">
 						<div class="ellipsis"><div>
 							<p><a title="{{video.videoInfo.snippet.title}}" href="#!/play/{{video.videoId}}">{{video.videoInfo.snippet.title}}</a></p>	
 						</div></div>
