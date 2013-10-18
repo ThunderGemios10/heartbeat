@@ -6,7 +6,85 @@ require 'connection.php';
 $postdata = file_get_contents("php://input",true);
 $request = json_decode($postdata);
 $useremail = $_SESSION["userinfo"]["email"];
-
+function modifyVideoFreeformTag($videoId,$freeformtags) {	
+	global $useremail;
+	if($freeformtags!=NULL) {
+		foreach ($freeformtags as $value) {
+			$query = '
+				INSERT INTO `tbl_freeformtags` (
+				   id
+				  ,`tagName`
+				  ,`tagCreator`
+				  ,`dateCreated`
+				  ,`dateModified`
+				  ,`status`
+				) VALUES
+				  (
+				  	NULL
+				    ,"'.$value.'"
+				    ,"'.$useremail.'"
+				    ,NOW()
+				    ,NOW()
+				    ,1
+				  )
+			';			
+			$result = mysql_query($query);
+			if($result) {
+				$lastId = mysql_insert_id();
+				$query = '
+					INSERT INTO `tbl_freeformtagspervideo` (
+					   id
+					  ,`freeformtagId`
+					  ,`videoId`
+					  ,`dateCreated`
+					  ,`dateModified`
+					  ,`status`
+					) VALUES
+					  (
+					  	NULL
+					    ,"'.$lastId.'"
+					    ,"'.$videoId.'"
+					    ,NOW()
+					    ,NOW()
+					    ,1
+					  )
+				';
+				$result = mysql_query($query);
+			}
+			else {
+				$query = '
+					SELECT id FROM tbl_freeformtags
+						WHERE tagName = "'.$value.'"
+							AND tagCreator = "'.$useremail.'" 
+						LIMIT 0,1
+				';
+				echo $query;
+				$result = mysql_query($query);
+				$row = mysql_fetch_assoc($result);
+				$query = '
+					INSERT INTO `tbl_freeformtagspervideo` (
+					   id
+					  ,`freeformtagId`
+					  ,`videoId`
+					  ,`dateCreated`
+					  ,`dateModified`
+					  ,`status`
+					) VALUES
+					  (
+					  	NULL
+					    ,"'.$row["id"].'"
+					    ,"'.$videoId.'"
+					    ,NOW()
+					    ,NOW()
+					    ,1
+					  )
+				';
+				$result = mysql_query($query);
+			}
+		}		
+	}
+	return;
+}
 function modifyVideoTag($videoId,$videoTags){
 	global $useremail;
 	$result = mysql_query('
@@ -25,9 +103,9 @@ function modifyVideoTag($videoId,$videoTags){
 		');
 	}
 	else {
-		mysql_query(
-			'INSERT INTO `tbl_videoperuser` (`videoId`,`useremail`,`dateCreated`,`dateModified`) VALUES (\''.$videoId.'\',\''.$useremail.'\',NOW(),NOW())'
-		);
+		mysql_query('
+			INSERT INTO `tbl_videoperuser` (`videoId`,`useremail`,`dateCreated`,`dateModified`) VALUES (\''.$videoId.'\',\''.$useremail.'\',NOW(),NOW())
+		');
 		$result = mysql_query('
 			SELECT * 
 			FROM tbl_videoperuser
@@ -47,7 +125,17 @@ function modifyVideoTag($videoId,$videoTags){
 	$insertQuery = 'INSERT INTO `tbl_tagspervideo` (`id`,`tagId`,`tagLevel`,`videoperuserId`) VALUES';
 	foreach($videoTags as $tag){
 		if($i!=0) $insertQuery.=',';
-		$selectedLevel = isset($tag->selectedLevel)?$tag->selectedLevel:1;
+		if(isset($tag->selectedLevel)){
+			if($tag->selectedLevel==NULL) {
+				$selectedLevel = 0;
+			}
+			else {
+				$selectedLevel = $tag->selectedLevel;
+			}
+		}
+		else {
+			$selectedLevel = 0;
+		}	
 		$insertQuery.='(NULL,\''.$tag->tagId.'\',\''.$selectedLevel.'\',\''.$videoperuserId.'\')';
 		$i++;
 	}
@@ -68,7 +156,10 @@ function getVideoTags($videoId,$type) {
 					INNER JOIN tbl_tagspervideo TPV 
 						ON VPU.id = TPV.videoperuserId 
 					INNER JOIN tbl_tags T 
-						ON T.id = TPV.tagId					
+						ON T.id = TPV.tagId	
+					LEFT JOIN tbl_intensityPerTag IPT 
+						ON IPT.tagId = T.id 
+							AND IPT.level = TPV.tagLevel				
 				WHERE videoId = "'.$videoId.'"
 				AND useremail = "'.$useremail.'"
 				AND type = "'.$type.'"				
@@ -81,7 +172,10 @@ function getVideoTags($videoId,$type) {
 					INNER JOIN tbl_tagspervideo TPV 
 						ON VPU.id = TPV.videoperuserId 
 					INNER JOIN tbl_tags T 
-						ON T.id = TPV.tagId					
+						ON T.id = TPV.tagId
+					LEFT JOIN tbl_intensityPerTag IPT 
+						ON IPT.tagId = T.id 
+							AND IPT.level = TPV.tagLevel				
 				WHERE videoId = "'.$videoId.'"
 				AND useremail = "'.$useremail.'"
 				AND type = "'.$type.'"
@@ -112,16 +206,16 @@ function getVideoTags($videoId,$type) {
 						ON VPU.id = TPV.videoperuserId 
 					INNER JOIN tbl_tags T 
 						ON T.id = TPV.tagId
-					INNER JOIN tbl_intensityPerTag IPT 
-						ON IPT.tagId = T.id
+					LEFT JOIN tbl_intensityPerTag IPT 
+						ON IPT.tagId = T.id 
+							AND IPT.level = TPV.tagLevel
 				WHERE videoId = "'.$videoId.'"
 				AND useremail = "'.$useremail.'"
-				AND type = "'.$type.'"
-				AND IPT.level = TPV.tagLevel
+				AND type = "'.$type.'"				
 		';		
 	}
 	
-
+// print_r($query);
 	$result = mysql_query($query);
 	while($row = mysql_fetch_assoc($result)){
 		$tempRow["tagId"] = $row["primaryId"];
@@ -182,8 +276,10 @@ else if(isset($request->getVideoTagsFeed)) {
 else if(isset($request->mode)) {
 	if($request->mode == 1) {
 		$videoId = $request->vidId;
-		$videoTags = $request->videoTags;
+		$videoTags = $request->videoTags;	
 		echo json_encode(modifyVideoTag($videoId,$videoTags));
+		$freeformtags = $request->free;
+		echo json_encode(modifyVideoFreeformTag($videoId,$freeformtags));
 	}
 }
 else {

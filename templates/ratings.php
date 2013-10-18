@@ -272,23 +272,29 @@
 							</tr>
 						</tbody>
 					</table>
-					<!-- {{tempRow}} -->
+					<pre>{{editRow | json}}</pre>
 					<table class="table table-hover table-bordered">
 						<thead>
 							<tr>
-							  <th colspan="3"><i class="glyphicon glyphicon-pencil"></i> Levels Edit</th>
+							  <th colspan="4"><i class="glyphicon glyphicon-pencil"></i> Levels Edit
+							  	<a href="" class="pull-right glyphicon glyphicon-plus" ng-click="addRow();showAddForms=true"></a>
+							  </th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="intensity in editRow.intensity | orderBy:'level'" ng-class="{true:'grayed'}[intensity.id==rating.tagId]">						
-							  	<td class="col-md-1">
-									<span class="pull-right">{{intensity.level}}</span>
+							  	<td class="col-md-1 no-padding border-red">
+									<!-- <span class="pull-right">{{intensity.level}}</span> -->
+									<input type="text" required class="form-control col-md-5 color-red clean-form-control no-border" ng-model="intensity.level"></input>
 							 	</td>
 							 	<td class="col-md-3 no-padding border-red">								
 									<input type="text" required class="form-control col-md-5 color-red clean-form-control no-border" ng-model="intensity.defaultName"></input>								
 							 	</td>
-							 	<td class="col-md-8 no-padding">								
+							 	<td class="col-md-7 no-padding">								
 									<input type="text" required class="form-control col-md-5 color-red clean-form-control no-border" ng-model="intensity.alternateName"></input>											
+							 	</td>
+							 	<td class="col-md-1" ng-click="removeRow(editRow.intensity,$index,editRow.tagId,intensity.level)">								
+									<button type="button" class="close" aria-hidden="true">&times;</button>
 							 	</td>
 							</tr>
 						</tbody>

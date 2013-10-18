@@ -1,4 +1,28 @@
 function playController($scope, $timeout, $location, $rootScope, $filter, sessionService, $routeParams, $http, databaseService, youtubeService, languageService, sessionService, DataService,$filter,$resource) {
+	
+	databaseService.getAllTags("json").then(function(result){		
+		// console.log(result);
+		$scope.primaryRank = result;
+	});
+
+	$scope.freeformtagss = [
+		"Dota"
+		,"Dota 2"
+		,"League of Legends"
+		,"Heroes of the Storm"
+		,"Smite"		
+	];
+	$scope.find = function (item) {
+		console.log(item);
+	};
+	$scope.change = function (val) {
+		console.log(val);
+	};
+	$scope.rankShowLevel1 = false;
+	$scope.rankShowLevel2 = false;
+	$scope.rankShowLevel3 = false;
+	$scope.rankShowLevel4 = false;
+
 	$scope.ytLinkVideo = DataService.ytLink_video;
 	$scope.ytLinkChannel = DataService.ytLink_channel;
 	$scope.ytLink_user = DataService.ytLink_user;
@@ -41,9 +65,29 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 		$scope.secondaryPick.prefix = prefix;
 		$scope.secondaryPick.selectedLevel = selected;
 	}
+	$scope.negate = function(negateVar) {
+		negateVar = !negateVar;
+		return negateVar;
+	}
+	$scope.dropdownChange = function (selectedLevel,intensities) {		
+		angular.forEach(intensities,function(intensity) {
+			// console.log(intensity.level+"=="+selectedLevel);
+			if(intensity.level==selectedLevel) {
+				// prefix = intensity.prefix;
+				return intensity.prefix;
+			}
+		});
+		// console.log(prefix);
+	}
+	$scope.defaultPick = function (argument) {
+		
+	}
 	$scope.removeTag = function(what) {
 		if(what=="primary") {
 			$scope.primaryPick = null;
+		}
+		if(what=="primaryIntensity") {
+			$scope.primaryPick.selectedLevel = false;
 		}
 		else if(what=="copyright"){
 			$scope.secondaryPick = null;
@@ -79,7 +123,7 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 		}
 	});
 	$scope.showMoreFunc = function() {
-		console.log($scope.showMore);
+		// console.log($scope.showMore);
 		if($scope.showMore) {
 			$scope.showMoreText="Show more";
 			$scope.showMore=false;
@@ -111,8 +155,11 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 		if(game) angular.forEach(game,function(tmp){
 			temp.push(tmp);
 		});
-		console.log(temp);
-		$http({method: 'POST',url:'model/videotags_model.php',data: {vidId:videoId,videoTags:temp,mode:1},headers:{'Content-Type': 'application/data'}}).success(function(data,status,headers,config){		
+
+		free = $scope.free;
+
+		console.log(free);
+		$http({method: 'POST',url:'model/videotags_model.php',data: {vidId:videoId,videoTags:temp,mode:1,free:free},headers:{'Content-Type': 'application/data'}}).success(function(data,status,headers,config){		
 			$scope.saveText = 'Saved!'
 			$scope.ratingSaved = true;
 			$scope.checkClass = "success-text";
@@ -121,51 +168,56 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 			console.log(data);
 		}).error(function(data,status,headers,config){});	
 	};
-	console.log('$routeParams.videoId');
-	console.log($routeParams.videoId);
+	// console.log('$routeParams.videoId');
+	// console.log($routeParams.videoId);
 	databaseService.getVideo($routeParams.videoId).then(function(result){
 		databaseService.getAllTags(1).then(function(tags){
 			$scope.primaryTags = tags;
 			// $scope.rating = [];
 			databaseService.getAllTags(2).then(function(tags){
-				$scope.tags = tags;			
-				databaseService.getAllTags(3).then(function(tags){
-					$scope.secondtags = tags;			
-					databaseService.getAllTags(4).then(function(tags){
-						// console.log('.getAllTags(4)');
-						// console.log(tags);
-						tags.splice(0, 1);
-						var topLanguages = [];
-						var topLanguagesList = [
-							'English'
-							,'Chinese'
-							,'German'							
-						];
-						angular.forEach(topLanguagesList,function(list){
-							for(var i=0;i<tags.length;i++) {
-								// console.log(tags[i]);								
-								if(tags[i].name==list) {
-									topLanguages.push(tags[i]);
-									tags.splice(i, 1);
-								}										
-							}
-						});
-						var orderedLanguage = topLanguages;
-						angular.forEach(tags,function(tag){
-							orderedLanguage.push(tag);
-						});
-						$scope.languageTags = orderedLanguage;
-						databaseService.getAllTags(5).then(function(tags){
+				$scope.tags = tags;
+				databaseService.getCurrentUserFreeTags().then(function(tags){
+					$scope.freeformtags = tags;
+					console.log('getCurrentUserFreeTags');
+					console.log(tags);
+					databaseService.getAllTags(3).then(function(tags){
+						$scope.secondtags = tags;			
+						databaseService.getAllTags(4).then(function(tags){
+							// console.log('.getAllTags(4)');
+							// console.log(tags);
 							tags.splice(0, 1);
-							$scope.gameslist = tags;
-							$scope.loadVidTags();
-						});						
-					});
-				});					
+							var topLanguages = [];
+							var topLanguagesList = [
+								'English'
+								,'Chinese'
+								,'German'							
+							];
+							angular.forEach(topLanguagesList,function(list){
+								for(var i=0;i<tags.length;i++) {
+									// console.log(tags[i]);								
+									if(tags[i].name==list) {
+										topLanguages.push(tags[i]);
+										tags.splice(i, 1);
+									}										
+								}
+							});
+							var orderedLanguage = topLanguages;
+							angular.forEach(tags,function(tag){
+								orderedLanguage.push(tag);
+							});
+							$scope.languageTags = orderedLanguage;
+							databaseService.getAllTags(5).then(function(tags){
+								tags.splice(0, 1);
+								$scope.gameslist = tags;
+								$scope.loadVidTags();
+							});						
+						});
+					});	
+				});				
 			});
 		});
-		console.log('result.length<1');
-		console.log(result);
+		// console.log('result.length<1');
+		// console.log(result);
 		$scope.activeRow = result;
 		if(result.length<1) {
 			youtubeService.getDetails($routeParams.videoId,0).then(function(outDetails){
@@ -187,7 +239,7 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 		}
 	});
 	databaseService.getRatedVideo(20).then(function(video){
-		console.log('getRatedVideo');console.log(video);
+		// console.log('getRatedVideo');console.log(video);
 		$scope.suggestRated = video;
 	});
 	databaseService.getUnRatedVideo(5).then(function(video){		
@@ -209,22 +261,21 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 					}
 				});	
 			}
-			$scope.tagReady1 = true;	
-			databaseService.getVideoTags($scope.activeRow.videoId,2).then(function(vidtags){					
+			$scope.tagReady1 = true;
+			databaseService.getCurrentVideoUserFreeTags($scope.activeRow.videoId).then(function(vidtags){	
+				$scope.free = vidtags;
+			databaseService.getVideoTags($scope.activeRow.videoId,2).then(function(vidtags){				
 				$scope.userVidTags = vidtags;
 				$scope.rating = [];	
-				// $scope.gameslist = [];	
-				// console.log('$scope.tags');
-				// console.log($scope.tags);
-				// console.log('$scope.userVidTags');
-				// console.log($scope.userVidTags);
 				angular.forEach($scope.userVidTags,function(vidTags){
 					var keepGoing = true;
 					angular.forEach($scope.tags,function(vt){
-						if(keepGoing){							
-							// console.log('1'+vt["tagId"]+" == "+vidTags["tagId"]);
+						if(keepGoing){	
+							console.log(vt["tagId"]+"======"+vidTags["tagId"]);											
 							if(vt["tagId"]==vidTags["tagId"]) {
 								var keepGoing2 = true;
+								vt.selectedLevel = null;
+								vt.prefix="";
 								angular.forEach(vt.intensity,function(intensity){
 									if(keepGoing2){
 										// console.log(intensity);
@@ -232,14 +283,14 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 										if(intensity.level==vidTags["tagLevel"]) {
 											vt.selectedLevel = vidTags["tagLevel"];
 											// console.log(intensity.defaultName);
-											vt.prefix = intensity.defaultName;
-											$scope.rating.push(vt);
-											keepGoing = false;
+											vt.prefix = intensity.defaultName;											
+												
 											keepGoing2 = false;
 											$scope.savingStatus = 1;
 										}
 									}
-								});														
+								});	
+								$scope.rating.push(vt);											
 							}
 						}	
 					});
@@ -254,8 +305,6 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 						angular.forEach($scope.secondtags,function(sec){
 							if(keepGoing){
 								// console.log('$scope.activeRow.videoId,3');
-								// console.log(sec["tagId"]+" == "+$scope.userSecondaryTags["tagId"]);
-								// console.log($scope.userSecondaryTags);
 								if(sec["tagId"]==$scope.userSecondaryTags["tagId"]) {
 									sec.selectedLevel = $scope.userSecondaryTags["tagLevel"];								
 									sec.prefix = $scope.userSecondaryTags["prefix"];
@@ -267,8 +316,8 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 					}
 					$scope.tagReady3 = true;
 					databaseService.getVideoTags($scope.activeRow.videoId,4).then(function(vidtags){
-						// console.log('$scope.activeRow.videoId,4');
-						// console.log(vidtags);
+						console.log('$scope.activeRow.videoId,4');
+						console.log(vidtags);
 						$scope.language = [];
 						$scope.userVidLanguageTag = vidtags;
 						// $scope.language = vidtags;
@@ -279,6 +328,8 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 									// console.log('1'+vt["tagId"]+" == "+vidTags["tagId"]);
 									if(vt["tagId"]==vidTags["tagId"]) {
 										var keepGoing2 = true;
+										vt.selectedLevel=null;
+										vt.prefix="";
 										angular.forEach(vt.intensity,function(intensity){
 											if(keepGoing2){
 												// console.log(intensity);
@@ -286,22 +337,22 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 												if(intensity.level==vidTags["tagLevel"]) {
 													vt.selectedLevel = vidTags["tagLevel"];
 													// console.log(intensity.defaultName);
-													vt.prefix = intensity.defaultName;
-													$scope.language.push(vt);
+													vt.prefix = intensity.defaultName;													
 													keepGoing = false;
 													keepGoing2 = false;
 													$scope.savingStatus = 1;
 												}
 											}
-										});														
+										});
+										$scope.language.push(vt);														
 									}
 								}	
 							});
 						});	
 						$scope.tagReady4 = true;
 						databaseService.getVideoTags($scope.activeRow.videoId,5).then(function(vidtags){
-							console.log('$scope.activeRow.videoId,5');
-							console.log(vidtags);
+							// console.log('$scope.activeRow.videoId,5');
+							// console.log(vidtags);
 							$scope.game = [];
 							$scope.userVidGameTag = vidtags;
 							// $scope.language = vidtags;
@@ -312,6 +363,8 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 										// console.log('1'+vt["tagId"]+" == "+vidTags["tagId"]);
 										if(vt["tagId"]==vidTags["tagId"]) {
 											var keepGoing2 = true;
+											vt.selectedLevel=null;
+											vt.prefix="";
 											angular.forEach(vt.intensity,function(intensity){
 												if(keepGoing2){
 													// console.log(intensity);
@@ -320,13 +373,14 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 														vt.selectedLevel = vidTags["tagLevel"];
 														// console.log(intensity.defaultName);
 														vt.prefix = intensity.defaultName;
-														$scope.game.push(vt);
+														
 														keepGoing = false;
 														keepGoing2 = false;
 														$scope.savingStatus = 1;
 													}
 												}
-											});														
+											});	
+											$scope.game.push(vt);													
 										}
 									}	
 								});
@@ -336,6 +390,7 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 					});
 				});
 			});
+			});		
 		});
 		
 		databaseService.getVideoTagCount($scope.activeRow.videoId).then(function(tagCount){
@@ -388,8 +443,8 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
         }, 1500);
     }
     var count = 0;
-    $scope.$watch('[primaryPick, rating, secondaryPick, language, game, tagReady1, tagReady2, tagReady3, tagReady4, tagReady5]',function(){
-		console.log($scope.tagReady1+" --> "+$scope.tagReady2+" --> "+$scope.tagReady3+" --> "+$scope.tagReady4);
+    $scope.$watch('[primaryPick, rating, secondaryPick, language, game, free, tagReady1, tagReady2, tagReady3, tagReady4, tagReady5]',function(){
+		// console.log($scope.tagReady1+" --> "+$scope.tagReady2+" --> "+$scope.tagReady3+" --> "+$scope.tagReady4);
 		if($scope.tagReady1 && $scope.tagReady2 && $scope.tagReady3 && $scope.tagReady4 && $scope.tagReady5) {
 			if(count == 0) {
 				count = 1;
