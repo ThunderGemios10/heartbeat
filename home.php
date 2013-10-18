@@ -42,21 +42,27 @@ if(!(isset($_SESSION["valid"]))) {
 	<script src="js/ui-jq.js"></script>
 	<script src="js/adminController.js"></script>
 	<script src="js/groupController.js"></script>
-		
+	<script src="component/ngTagsInput/ng-tags-input.js"></script>
+	<script src="component/select2/select2.min.js"></script>	
+
+
 	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="component/bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="component/bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="component/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
 	<link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
 	<link rel="shortcut icon" href="component/bootstrap/assets/ico/favicon.png">
 
-	<link href="component/bootstrap/css/bootstrap.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/main.css" rel="stylesheet">
 	<link href="css/sidemenu.css" rel="stylesheet">    
-	<link href="component/chosen/chosen.css" rel="stylesheet">
-
+	<link href="component/chosen/chosen.css" rel="stylesheet">	
+	<link href="component/ngTagsInput/ng-tags-input.css" rel="stylesheet">	
+	<link href="component/select2/select2.css" rel="stylesheet">	
+	
 </head>
 <body>
 	<div id="container">
+		<!-- <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput" /> -->
 		<div class="page-wrap">
 			<div id="header" class="navbar navbar-inverse navbar-fixed-top navbar-red">
 				<div class="container">
@@ -127,9 +133,12 @@ if(!(isset($_SESSION["valid"]))) {
 		</div>		
 	</div>	
 
-	<script src="component/bootstrap/js/bootstrap.min.js"></script>	
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>	
+    <script src="component/typeHead/typehead.js"></script>
+    <script src="component/typeHead/igTypeahead.js"></script>
     <script src="component/timeago/timeago.js"></script>
-    <script src="js/human.js"></script>   
+    <script src="component/bootstrap-tag/bootstrap-tagsinput.min.js"></script>
+    <script src="js/human.js"></script>
     <script type='text/javascript'>
 		$(".alert").alert();
 		$('#navbar').affix();

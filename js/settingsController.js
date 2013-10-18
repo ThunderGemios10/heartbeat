@@ -23,7 +23,7 @@ function settingsController($scope, $rootScope, $log, $modal, $routeParams, $htt
 		,{level:2}
 		,{level:3}
 	];
-	// $scope.tempRow = {};
+	$scope.addIntensityToPrimary = 2;
 	$scope.statusBtnLoading = false;
 	$scope.tagType = [
 		{tagTypeId:1,tagTypeName:'Primary'}	
@@ -54,14 +54,16 @@ function settingsController($scope, $rootScope, $log, $modal, $routeParams, $htt
 	}
 	$scope.loadRatings = function(activeId){
 		databaseService.getAllTags().then(function(tags){
-			var withOutLanguageTags = [];
+			var filtered = [];
 			for(var i=0;i<tags.length;i++) {
-				if(tags[i].type!="4") {
-					withOutLanguageTags.push(tags[i]);
+				if(tags[i].type!="4" && tags[i].type!="5") {
+					filtered.push(tags[i]);
 				}			
 			}
-			console.log(withOutLanguageTags);
-			$scope.ratingsData = withOutLanguageTags;
+			console.log(filtered);
+			$scope.ratingsData = filtered;
+			// console.log(tags);
+			// $scope.ratingsData = tags;
 			if(activeId) {
 				$scope.resetViewTo(activeId);
 				$timeout(function () {
@@ -72,6 +74,14 @@ function settingsController($scope, $rootScope, $log, $modal, $routeParams, $htt
 				$scope.resetView();
 			}
 		});
+	}
+	$scope.removeRow = function (arr,idx,tagId,level) {
+		if (confirm('Are you sure you want delete?')) {
+		   databaseService.deleteIntensity(tagId,level).then(function(result){
+				console.log(result);
+				arr.splice(idx,1);
+			});
+		}		
 	}
 	$scope.resetView = function(){
 		var temp = $filter('orderBy')($scope.ratingsData,'name');
@@ -147,6 +157,26 @@ function settingsController($scope, $rootScope, $log, $modal, $routeParams, $htt
 	$scope.$watch('[searchTag, statusOnly]',function(){
 		$scope.show("resetview");
 	},true);
+	// $scope.$watch('activeRow',function(){
+	// 	if($scope.activeRow.type==1) {
+	// 		for(var i=0;i<$scope.addIntensityToPrimary;i++) {
+	// 			$scope.activeRow.intensity.push({});
+	// 		}
+	// 	}
+	// },true);
+	$scope.addRow = function () {
+		var newLevel = $scope.editRow.intensity.length+1;
+		console.log($scope.editRow.tagId);
+		var intensityRow = {
+			id:$scope.editRow.tagId
+			,defaultName:""
+			,alternateName:""
+			,level:newLevel.toString()
+			,mainIntensityId:null
+			,intensityDateCreated:null
+		};
+		$scope.editRow.intensity.push(intensityRow);
+	}
 	$scope.tagStatus = function () {		
 		if($scope.statusOnly) {		
 			return {status:1};
@@ -180,7 +210,7 @@ function settingsController($scope, $rootScope, $log, $modal, $routeParams, $htt
 	}
 	$scope.saveEditTag = function(editTag) {		
 		databaseService.editSystemTag(editTag).then(function(response){
-			// console.log(response);
+			console.log(response);
 			$scope.loadRatings(editTag.tagId);
 			$scope.activeRow = editTag;
 			$scope.show('view');

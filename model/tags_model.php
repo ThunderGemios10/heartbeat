@@ -5,6 +5,7 @@ require 'connection.php';
 
 $postdata = file_get_contents("php://input",true);
 $request = json_decode($postdata);
+$useremail = $_SESSION["userinfo"]["email"];
 
 function addTag($tag){
 	$result = mysql_query('
@@ -41,19 +42,37 @@ function editTag($tag){
 	$insertId = mysql_insert_id();
 	$toReturn = array("insertId"=>$insertId);
 	if($result==1) {
-		foreach ($tag->intensity as $value) {
-
-			$result = mysql_query('
-				UPDATE `tbl_intensitypertag` 
-					SET `defaultName`="'.$value->defaultName.'"
-						,`alternateName`="'.$value->alternateName.'"
-					WHERE tagId = '.$tag->tagId.'
-						AND level = '.$value->level.'
-			');		
+		foreach ($tag->intensity as $value) {			
+				if($value->mainIntensityId==NULL) {
+					$result = mysql_query('							
+						INSERT INTO `tbl_intensitypertag`(`id`, `tagId`, `defaultName`, `alternateName`, `level`, `dateCreated`) 
+							VALUES (NULL,"'.$value->id.'","'.$value->defaultName.'","'.$value->alternateName.'","'.$value->level.'",NOW())
+					');
+				}
+				else {
+					$result = mysql_query('
+						UPDATE `tbl_intensitypertag` 
+							SET `defaultName`="'.$value->defaultName.'"
+								,`alternateName`="'.$value->alternateName.'"
+							WHERE tagId = '.$tag->tagId.'
+								AND level = '.$value->level.'
+					');	
+				}		
 		}
 		return $toReturn;
 	}
 	return;
+}
+function deleteIntensity($tag,$level) {
+	$result = mysql_query('							
+		DELETE FROM `tbl_intensitypertag`
+			WHERE tagId = '.$tag.'
+				AND level = '.$level.'
+	');
+	if($result==1) {
+		return true;
+	}
+	return false;
 }
 function deactivateTag($tagId) {
 	$result = mysql_query('
@@ -167,6 +186,7 @@ function getTagsAll(){
 	while($row = mysql_fetch_assoc($result)){
 		if($row["tagId"]==$temp) {
 			// echo "Equals";
+			$intensity["id"] = $row["id"];
 			$intensity["mainIntensityId"] = $row["mainIntensityId"];
 			$intensity["defaultName"] = $row["defaultName"];
 			$intensity["alternateName"] = $row["alternateName"];
@@ -203,9 +223,11 @@ function getTagsAll(){
 			}
 			else {
 				$intensity["id"] = $row["id"];
+				$intensity["mainIntensityId"] = $row["mainIntensityId"];
 				$intensity["defaultName"] = $row["defaultName"];
 				$intensity["alternateName"] = $row["alternateName"];
 				$intensity["level"] = $row["level"];
+				$intensity["intensityDateCreated"] = $row["intensityDateCreated"];
 				array_push($tempRow["intensity"], $intensity);
 				if($tempRow["type"]==4 && $tempRow["name"]=="Language"){
 					array_push($languageIntensity, $intensity);
@@ -220,6 +242,46 @@ function getTagsAll(){
 	// var_dump($languageIntensity);
 	// var_dump($tempRow);
 	array_push($returnArr, $tempRow);
+	return $returnArr;
+}
+
+function getAllTagsJSON(){
+	$contents = file_get_contents('http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/basictags.json');		
+	// var_dump($contents);
+	$request = json_decode($contents);
+	return $request;
+}
+function getCurrentUserFreeTags() {	
+	global $useremail;
+	$returnArr = array();
+	$query = '
+		SELECT tagName FROM `tbl_freeformtags` 
+			WHERE tagCreator = "'.$useremail.'"
+	';
+	// echo $query;
+	$result = mysql_query($query);
+	while($row = mysql_fetch_assoc($result)){
+		$tempRow = $row["tagName"];
+		// $tempRow["tagCreator"] = $row["tagCreator"];		
+		array_push($returnArr, $tempRow);	
+	}
+	return $returnArr;
+}
+function getCurrentVideoUserFreeTags($value) {
+	global $useremail;
+	$returnArr = array();
+	$query = '
+		SELECT tagName FROM `tbl_freeformtags` FFT
+			INNER JOIN `tbl_freeformtagspervideo` FPV
+				ON FFT.id = FPV.`freeformtagId`
+			WHERE videoId = "'.$value.'"
+	';
+	// echo $query;
+	$result = mysql_query($query);
+	while($row = mysql_fetch_assoc($result)){
+		$tempRow = $row["tagName"];		
+		array_push($returnArr, $tempRow);	
+	}
 	return $returnArr;
 }
 if(isset($request->tagArr)) {
@@ -240,6 +302,11 @@ else if(isset($request->tagIdToActivate)) {
 	$values = $request->tagIdToActivate;
 	echo activateTag($values);
 }
+else if(isset($request->tagIdDeleteIntensity)) {
+	$tagId = $request->tagIdDeleteIntensity;
+	$level = $request->level;
+	echo deleteIntensity($tagId,$level);
+}
 else if(isset($request->getTagsAll)) {
 	echo json_encode(getTags(2));
 }
@@ -257,6 +324,17 @@ else if(isset($request->getGamesAll)) {
 }
 else if(isset($request->getTagsAlls)) {
 	echo json_encode(getTagsAll());
+}
+else if(isset($request->getAllTagsJSON)) {
+	echo json_encode(getAllTagsJSON(),JSON_NUMERIC_CHECK);
+}
+else if(isset($request->getCurrentUserFreeTags)) {
+	$value = $request->getCurrentUserFreeTags;
+	echo json_encode(getCurrentUserFreeTags());
+}
+else if(isset($request->getCurrentVideoUserFreeTags)) {
+	$value = $request->getCurrentVideoUserFreeTags;
+	echo json_encode(getCurrentVideoUserFreeTags($value));
 }
 else {
 	// $result = mysql_query('SELECT *

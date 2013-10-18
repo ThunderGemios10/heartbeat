@@ -1,0 +1,70 @@
+[{
+    "tagId": "2",
+    "name": "Bad",
+    "description": "Primary Tag 2",
+    "tagsDateCreated": "1379001600",
+    "type": "1",
+    "status": "1",
+    "intensity": [
+          {
+            "id": "4",
+            "defaultName": "Quite",
+            "alternateName": "Quite Bad",
+            "level": "1",
+            "mainIntensityId": "3",
+            "intensityDateCreated": "1379001600"
+          },
+          {
+            "id": "4",
+            "defaultName": "Just",
+            "alternateName": "Just Bad",
+            "level": "2",
+            "mainIntensityId": "5",
+            "intensityDateCreated": "1379001600"
+          },
+          {
+            "id": "4",
+            "defaultName": "Very",
+            "alternateName": "Ridiculous",
+            "level": "3",
+            "mainIntensityId": "6",
+            "intensityDateCreated": "1379001600"
+          }
+    ],
+    "selectedLevel": "1",
+    "prefix": "Quite"
+},
+{
+    "tagId": "3",
+    "name": "Undecided",
+    "description": "Primary Tag 3",
+    "tagsDateCreated": "1379001600",
+    "type": "1",
+    "status": "1",
+    "intensity": [
+          {
+            "id": "7",
+            "defaultName": "Not so",
+            "alternateName": "Normal",
+            "level": "1",
+            "mainIntensityId": "6",
+            "intensityDateCreated": "1379001600"
+          },
+          {
+            "id": "7",
+            "defaultName": "Quite",
+            "alternateName": "Above Normal",
+            "level": "2",
+            "mainIntensityId": "8",
+            "intensityDateCreated": "1379001600"
+          },
+          {
+            "id": "7",
+            "defaultName": "Very",
+            "alternateName": "Very",
+            "level": "3",
+            "mainIntensityId": "9",
+            "intensityDateCreated": "1379001600"
+          }
+    ]
+}]

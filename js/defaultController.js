@@ -2,7 +2,7 @@ function defaultController($scope, $rootScope, $location, sessionService, $route
 	$scope.searchDelay = function(str) {
 		$location.path("/search/"+str);
 	};
-	console.log($rootScope);
+	// console.log($rootScope);
 	// $scope.search = function(str) {
 	// 	console.log(str+'searchFundtion');
 	// 	// $location.path("/rank/"+str);
@@ -40,7 +40,7 @@ function defaultController($scope, $rootScope, $location, sessionService, $route
 	$scope.currentSort=$scope.sortBy[0];
 
 	sessionService.getByKey('channelUsername').then(function(result){
-		console.log('channelUsername');
-		console.log(result);
+		// console.log('channelUsername');
+		// console.log(result);
 	});
 }
