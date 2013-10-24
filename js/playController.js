@@ -6,7 +6,8 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 		databaseService.getAllTags("json").then(function(result){
 			$scope.primaryRank = result;
 		});
-
+     
+     
 		$scope.freeformtagss = [
 			"Dota"
 			,"Dota 2"
@@ -268,8 +269,7 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 		});
 		databaseService.getUnRatedVideo(5).then(function(video){		
 			$scope.suggestUnRated = video;
-		}
-		);
+		});
 		$scope.loadVidTags = function(){
 			databaseService.isAddedToLater($scope.activeRow.videoId).then(function(result) {
 				// console.log('isAddedToLater');
