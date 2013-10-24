@@ -251,21 +251,24 @@ function getAllTagsJSON(){
 	$request = json_decode($contents);
 	return $request;
 }
-function getCurrentUserFreeTags() {	
+function getCurrentUserFreeTags () {
 	global $useremail;
 	$returnArr = array();
 	$query = '
-		SELECT tagName FROM `tbl_freeformtags` 
+		SELECT tagName FROM `tbl_freeformtags` FFT
 			WHERE tagCreator = "'.$useremail.'"
 	';
 	// echo $query;
 	$result = mysql_query($query);
-	while($row = mysql_fetch_assoc($result)){
-		$tempRow = $row["tagName"];
-		// $tempRow["tagCreator"] = $row["tagCreator"];		
-		array_push($returnArr, $tempRow);	
-	}
-	return $returnArr;
+	if($result) {
+		while($row = mysql_fetch_assoc($result)){
+			$tempRow = $row["tagName"];		
+			array_push($returnArr, $tempRow);	
+		}
+		return $returnArr;
+	}	
+	else 
+		return;
 }
 function getCurrentVideoUserFreeTags($value) {
 	global $useremail;
@@ -275,6 +278,7 @@ function getCurrentVideoUserFreeTags($value) {
 			INNER JOIN `tbl_freeformtagspervideo` FPV
 				ON FFT.id = FPV.`freeformtagId`
 			WHERE videoId = "'.$value.'"
+				AND tagger = "'.$useremail.'"
 	';
 	// echo $query;
 	$result = mysql_query($query);
@@ -284,6 +288,52 @@ function getCurrentVideoUserFreeTags($value) {
 	}
 	return $returnArr;
 }
+function getFreeTags($mode,$start,$limit) {	
+	global $useremail;
+	$returnArr = array();
+	if($mode=="all") {		
+		$query = '
+			SELECT tagName,tagCreator, COUNT(videoId) numberOfTimesUsed FROM `tbl_freeformtagspervideo` FPV
+				INNER JOIN `tbl_freeformtags` FFT
+					ON FPV.freeformtagId = FFT.`id`
+				GROUP BY tagName
+				ORDER BY numberOfTimesUsed DESC
+				LIMIT '.$start.','.$limit.'
+		';
+		$result = mysql_query($query);
+		while($row = mysql_fetch_assoc($result)){
+			$tempRow["tagName"] = $row["tagName"];
+			$tempRow["tagCreator"] = $row["tagCreator"];
+			$tempRow["numberOfTimesUsed"] = $row["numberOfTimesUsed"];			
+			array_push($returnArr, $tempRow);	
+		}
+	}
+	else if($mode=="currentuser") {
+		$query = '
+			SELECT tagName,COUNT(videoId) numberOfTimesUsed FROM `tbl_freeformtagspervideo` FPV
+				RIGHT JOIN `tbl_freeformtags` FFT
+					ON FPV.freeformtagId = FFT.`id`
+				WHERE tagCreator = "'.$useremail.'"
+				GROUP BY tagName
+				ORDER BY numberOfTimesUsed DESC
+				LIMIT '.$start.','.$limit.'
+		';		
+		$result = mysql_query($query);
+		while($row = mysql_fetch_assoc($result)){
+			$tempRow["tagName"] = $row["tagName"];
+			$tempRow["numberOfTimesUsed"] = $row["numberOfTimesUsed"];
+			array_push($returnArr, $tempRow);	
+		}	
+	}
+	// echo $query; 
+	return $returnArr;
+}
+
+
+/***********************************************************************************/
+
+
+
 if(isset($request->tagArr)) {
 	// var_dump('qwe');
 	$values = $request->tagArr;
@@ -328,13 +378,22 @@ else if(isset($request->getTagsAlls)) {
 else if(isset($request->getAllTagsJSON)) {
 	echo json_encode(getAllTagsJSON(),JSON_NUMERIC_CHECK);
 }
-else if(isset($request->getCurrentUserFreeTags)) {
-	$value = $request->getCurrentUserFreeTags;
-	echo json_encode(getCurrentUserFreeTags());
-}
 else if(isset($request->getCurrentVideoUserFreeTags)) {
 	$value = $request->getCurrentVideoUserFreeTags;
 	echo json_encode(getCurrentVideoUserFreeTags($value));
+}
+else if(isset($request->getCurrentUserFreeTags)) {
+	echo json_encode(getCurrentUserFreeTags());
+}
+else if(isset($request->getTopFreeTags)) {
+	$start = $request->start;
+	$limit = $request->limit;
+	echo json_encode(getFreeTags("all",$start,$limit));
+}
+else if(isset($request->getTopCurrentUserFreeTags)) {	
+	$start = $request->start;
+	$limit = $request->limit;
+	echo json_encode(getFreeTags("currentuser",$start,$limit));
 }
 else {
 	// $result = mysql_query('SELECT *
