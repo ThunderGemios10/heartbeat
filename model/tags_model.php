@@ -282,10 +282,12 @@ function getCurrentVideoUserFreeTags($value) {
 	';
 	// echo $query;
 	$result = mysql_query($query);
-	while($row = mysql_fetch_assoc($result)){
-		$tempRow = $row["tagName"];		
-		array_push($returnArr, $tempRow);	
-	}
+	if($result) {
+		while($row = mysql_fetch_assoc($result)){
+			$tempRow = $row["tagName"];		
+			array_push($returnArr, $tempRow);	
+		}	
+	}	
 	return $returnArr;
 }
 function getFreeTags($mode,$start,$limit) {	
