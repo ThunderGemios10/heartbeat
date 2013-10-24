@@ -13,9 +13,9 @@ var videoTrackApp = angular.module('videoTracker',['ui-filter','trim-filter','te
 	when('/play/:videoId', {
       templateUrl: 'templates/play.php',
       controller: playController }).
-	when('/play/:videoId/:mode', {
-      templateUrl: 'templates/play.php',
-      controller: playController }).
+	// when('/play', {
+ //      templateUrl: 'templates/dashboard.php',
+ //      controller: dashboardController }).	
 	when('/about', {
       templateUrl: 'templates/about.php',
       controller: videoTrackController }).
@@ -45,7 +45,13 @@ var videoTrackApp = angular.module('videoTracker',['ui-filter','trim-filter','te
       controller: adminController }). 
 	when('/network/:groupId', {
       templateUrl: 'templates/group.php',
-      controller: groupController }). 
+      controller: groupController }).
+	when('/ranklater', {
+      templateUrl: 'templates/ranklater.php',
+      controller: ranklaterController }).
+	when('/usertags', {
+      templateUrl: 'templates/usertagslist.php',
+      controller: usertagslistController }). 
     otherwise({
       redirectTo: 'dashboard'});
 	  
@@ -227,6 +233,16 @@ videoTrackApp.factory('databaseService', function($http,$q) {
 			});
 			return deferred.promise;
 		}
+
+
+
+
+/*TAGS************************************************************************/
+		
+
+
+
+
 		,getAllTags: function(type) {
 			var deferred = $q.defer();
 			if(type==1)  {
@@ -304,6 +320,20 @@ videoTrackApp.factory('databaseService', function($http,$q) {
 			});
 			return deferred.promise;
 		}
+		,getTopFreeTags: function (start,limit) {
+			var deferred = $q.defer();
+			$http.post('model/tags_model.php', {getTopFreeTags:true,start:start,limit:limit}).success(function(data) {				
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
+		,getTopCurrentUserFreeTags: function (start,limit) {
+			var deferred = $q.defer();
+			$http.post('model/tags_model.php', {getTopCurrentUserFreeTags:true,start:start,limit:limit}).success(function(data) {				
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
 		,getCurrentVideoUserFreeTags: function (videoId) {
 			var deferred = $q.defer();
 			$http.post('model/tags_model.php', {getCurrentVideoUserFreeTags:videoId}).success(function(data) {				
@@ -325,6 +355,18 @@ videoTrackApp.factory('databaseService', function($http,$q) {
 			});
 			return deferred.promise;
 		}
+
+
+
+
+
+/*RANKED VIDEOS********************************************************************************/
+		
+
+
+
+
+
 		,getRankedVideoByUser: function() {
 			var deferred = $q.defer();						
 			$http.post('model/uservideo_model.php', {getRanked:true}).success(function(data) {
@@ -439,8 +481,43 @@ videoTrackApp.factory('databaseService', function($http,$q) {
 				deferred.resolve(data);
 			});
 			return deferred.promise;
-		}		
+		}
+		,addToLater: function(videoId){
+			var deferred = $q.defer();						
+			$http.post('model/uservideo_model.php', {addToLater :videoId}).success(function(data) {
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}	
+		,isAddedToLater: function(videoId){
+			var deferred = $q.defer();						
+			$http.post('model/uservideo_model.php', {isAddedToLater :videoId}).success(function(data) {
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
+		,getRankLaterByUser: function(){
+			var deferred = $q.defer();						
+			$http.post('model/uservideo_model.php', {getRankLaterByUser :true}).success(function(data) {
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}	
 	}
+});
+videoTrackApp.factory('utility', function($http,$q) {
+   return {
+        timeago: function (dated) {
+            var date = humanized_time_span(dated);
+        	return date;
+        }
+        ,getParameterByName: function (url, name) {
+		    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+		    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		        results = regex.exec(url);
+		    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+    };
 });
 videoTrackApp.directive('progressBar', function() {
 	return function(scope, element, attrs) {
@@ -459,6 +536,8 @@ videoTrackApp.directive('sidebarNav', ['databaseService', function (databaseServ
       	var userchannel = "";
       	var dashboard = "";
       	var newsfeed = "";
+      	var ranklater = "";
+      	var usertags = "";
       	var current = 'active';
       	var group_anyTV='';
     	scope.groups = [];
@@ -474,7 +553,10 @@ videoTrackApp.directive('sidebarNav', ['databaseService', function (databaseServ
       	if(active=="userchannel") userchannel = "active";
       	else if(active=="dashboard") dashboard = "active";
       	else if(active=="newsfeed") newsfeed = "active";
+      	else if(active=="ranklater") ranklater = "active";
+      	else if(active=="usertags") usertags = 'active';
       	else if(active=="anyTV") group_anyTV = 'active';
+
   	
       	scope.$watch('groups',function(groups){
       		scope.groupsTemplate = "";
@@ -490,28 +572,23 @@ videoTrackApp.directive('sidebarNav', ['databaseService', function (databaseServ
 	        		'<ul>'+
 	        			'<li class="'+userchannel+'">'+
 	        				'<a href="#!mychannel">'+
-	        					'<span>My Channel</span>'+
+	        					'<span>Profile</span>'+
 	        				'</a>'+
 	        			'</li>'+
 	        			'<li class="'+newsfeed+'">'+
 	        				'<a href="#!dashboard"><span>News Feed</span></a>'+
 	        			'</li>'+
-	        			'<li>'+
-	        				'<a href="#">'+
-	        					'<span>Tags</span>'+
-	        				'</a>'+
-	        			'</li>'+
-	        			'<li class="last">'+
-	        				'<a href="#"><span>Contact</span></a>'+
+	        			'<li class="last '+usertags+'">'+
+	        				'<a href="#!usertags"><span>Tags</span></a>'+
 	        			'</li>'+
 	        		'</ul>'+
 	        	'</div>'+
 	        	'<hr/>'+
 	        	'<div id="cssmenu">'+
 	        		'<ul>'+
-	        			'<li><a href="#"><span>Trending</span></a></li>'+
-	        			
-	        			'<li class="last"><a href="#"><span>Followed</span></a></li>'+        			
+	        			// '<li><a href="#"><span>Trending</span></a></li>'+
+	        			'<li class="'+ranklater+'"><a href="#!ranklater"><span>Rank later list</span></a></li>'+
+	        			// '<li class="last"><a href="#"><span>Followed</span></a></li>'+        			
 	        		'</ul>'+
 	        	'</div>'+
 	        	'<hr/>'+scope.groupsTemplate);
@@ -613,15 +690,17 @@ videoTrackApp.directive('selectTagBox', function () {
 	   		});
 		});
 		scope.$watch("[freeformtags,free]",function(){
-			element.select2({tags:scope.freeformtags,val:scope.free});
+			console.log(scope.freeformtags);
+			console.log(scope.free);
+			element.select2({
+				tags:scope.freeformtags
+				,val:scope.free
+				
+			});			
 		},true)
-		// scope.$watch(attrs.ngModel,function(val){
-			
-		// 		console.log(val);
-		//         scope[attrs.ngModel] = val;
-		//         element.select2;
-		//         console.log(scope[attrs.ngModel]);
-		// },true);
+		// ,formatNoMatches: function(term) {				     
+				//     return "Enter any tag!";
+				// }
 	};
 	return {
 		restrict:'ACE',

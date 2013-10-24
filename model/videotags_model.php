@@ -8,80 +8,102 @@ $request = json_decode($postdata);
 $useremail = $_SESSION["userinfo"]["email"];
 function modifyVideoFreeformTag($videoId,$freeformtags) {	
 	global $useremail;
+	var_dump($freeformtags);
 	if($freeformtags!=NULL) {
+		echo 'it deletes';
+		$query = '
+			DELETE FROM `tbl_freeformtagspervideo`
+				WHERE `tagger`=  "'.$useremail.'"
+		';	
+		$result = mysql_query($query);
 		foreach ($freeformtags as $value) {
-			$query = '
-				INSERT INTO `tbl_freeformtags` (
-				   id
-				  ,`tagName`
-				  ,`tagCreator`
-				  ,`dateCreated`
-				  ,`dateModified`
-				  ,`status`
-				) VALUES
-				  (
-				  	NULL
-				    ,"'.$value.'"
-				    ,"'.$useremail.'"
-				    ,NOW()
-				    ,NOW()
-				    ,1
-				  )
-			';			
-			$result = mysql_query($query);
-			if($result) {
-				$lastId = mysql_insert_id();
+			// var_dump($value);
+			if($value!="") {
+				$value = strtolower($value);
 				$query = '
-					INSERT INTO `tbl_freeformtagspervideo` (
+					INSERT INTO `tbl_freeformtags` (
 					   id
-					  ,`freeformtagId`
-					  ,`videoId`
+					  ,`tagName`
+					  ,`tagCreator`
 					  ,`dateCreated`
 					  ,`dateModified`
 					  ,`status`
 					) VALUES
 					  (
 					  	NULL
-					    ,"'.$lastId.'"
-					    ,"'.$videoId.'"
+					    ,"'.$value.'"
+					    ,"'.$useremail.'"
 					    ,NOW()
 					    ,NOW()
 					    ,1
 					  )
-				';
+				';			
 				$result = mysql_query($query);
-			}
-			else {
-				$query = '
-					SELECT id FROM tbl_freeformtags
-						WHERE tagName = "'.$value.'"
-							AND tagCreator = "'.$useremail.'" 
-						LIMIT 0,1
-				';
-				echo $query;
-				$result = mysql_query($query);
-				$row = mysql_fetch_assoc($result);
-				$query = '
-					INSERT INTO `tbl_freeformtagspervideo` (
-					   id
-					  ,`freeformtagId`
-					  ,`videoId`
-					  ,`dateCreated`
-					  ,`dateModified`
-					  ,`status`
-					) VALUES
-					  (
-					  	NULL
-					    ,"'.$row["id"].'"
-					    ,"'.$videoId.'"
-					    ,NOW()
-					    ,NOW()
-					    ,1
-					  )
-				';
-				$result = mysql_query($query);
+				if($result) {
+					$lastId = mysql_insert_id();
+					$query = '
+						INSERT INTO `tbl_freeformtagspervideo` (
+						   id
+						  ,`freeformtagId`
+						  ,`tagger`
+						  ,`videoId`
+						  ,`dateCreated`
+						  ,`dateModified`
+						  ,`status`
+						) VALUES
+						  (
+						  	NULL
+						    ,"'.$lastId.'"
+						    ,"'.$useremail.'"					    
+						    ,"'.$videoId.'"
+						    ,NOW()
+						    ,NOW()
+						    ,1
+						  )
+					';
+					$result = mysql_query($query);
+				}
+				else {
+					$query = '
+						SELECT id FROM tbl_freeformtags
+							WHERE tagName = "'.$value.'"
+								AND tagCreator = "'.$useremail.'" 
+							LIMIT 0,1
+					';
+					// echo "72".$query;
+					$result = mysql_query($query);
+					$row = mysql_fetch_assoc($result);
+					$query = '
+						INSERT INTO `tbl_freeformtagspervideo` (
+						   id
+						  ,`freeformtagId`
+						  ,`tagger`
+						  ,`videoId`
+						  ,`dateCreated`
+						  ,`dateModified`
+						  ,`status`
+						) VALUES
+						  (
+						  	NULL
+						    ,"'.$row["id"].'"
+						    ,"'.$useremail.'"
+						    ,"'.$videoId.'"
+						    ,NOW()
+						    ,NOW()
+						    ,1
+						  )
+					';
+					$result = mysql_query($query);
+				}
 			}
 		}		
+	}
+	else {
+		$query = '
+			DELETE FROM `tbl_freeformtagspervideo`
+				WHERE `tagger`=  "'.$useremail.'"
+		';	
+		$result = mysql_query($query);
 	}
 	return;
 }

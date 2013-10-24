@@ -1,4 +1,4 @@
-function dashboardController($scope, $routeParams, $rootScope, $http, youtubeService, DataService, sessionService, databaseService, $filter,$resource) {
+function dashboardController($scope, $routeParams, $rootScope, $http, youtubeService, utility, DataService, sessionService, databaseService, $filter, $resource, $location) {
 	console.log('dashboard');
 	$scope.timeago = function(dated){
         var date = humanized_time_span(dated);
@@ -29,16 +29,20 @@ function dashboardController($scope, $routeParams, $rootScope, $http, youtubeSer
 			}
 		});
 	});
+	$scope.ajaxCounter = -1;
 	$scope.loadFeed = function() {
 		databaseService.getRankedVideoByAll().then(function(result){
 			var videoList = [];
-			$scope.rankedVideos = [];
+
+			$scope.tempRankedVideos = [];
 			$scope.videoList = result;
 			angular.forEach(result,function(video){
 				videoList.push({videoId:video.videoId});
 			});
 			$scope.videoListToPass = videoList;
-			databaseService.getVideo($scope.videoListToPass).then(function(result){				
+
+			databaseService.getVideo($scope.videoListToPass).then(function(result){
+				$scope.ajaxCounter = result.length;
 				angular.forEach(result,function(item){
 					var keepGoing = true;
 					angular.forEach($scope.videoList,function(list){
@@ -48,10 +52,10 @@ function dashboardController($scope, $routeParams, $rootScope, $http, youtubeSer
 							if(item.videoId==list.videoId){
 								item.tagDateModified = Date.parse(list.dateModified);
 								item.taggerEmail = list.useremail;
-								console.log(list.useremail);
+								// console.log(list.useremail);
 								keepGoing = false;
 								databaseService.getVideoTagsFeed(item.videoId,list.useremail).then(function(vidtags){
-									console.log(vidtags);									
+									// console.log(vidtags);
 									item.videotags = vidtags;
 									item.groupedvideotags = {};
 									item.groupedvideotags['primary'] = [];
@@ -74,9 +78,8 @@ function dashboardController($scope, $routeParams, $rootScope, $http, youtubeSer
 									});
 									databaseService.getAuthUserByEmail(list.useremail).then(function(result){
 										item.taggerInfo = result[0];
-										$scope.rankedVideos.push(item);
-									});
-														
+										$scope.tempRankedVideos.push(item);
+									});													
 								});
 							}
 						}
@@ -85,4 +88,16 @@ function dashboardController($scope, $routeParams, $rootScope, $http, youtubeSer
 			});
 		});
 	}
+	$scope.postrank = function () {
+		$scope.videoIdToRank = utility.getParameterByName($scope.urltorank,"v");
+		$scope.newLocation = '/play/'+$scope.videoIdToRank;
+		$location.path($scope.newLocation);
+	}
+	$scope.$watch('[tempRankedVideos, ajaxCounter]',function(value){
+		if(value[0]) {
+			if(value[0].length==value[1]) {			
+				$scope.rankedVideos = $scope.tempRankedVideos;
+			}
+		}	
+	},true);
 }

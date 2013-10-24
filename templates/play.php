@@ -1,38 +1,73 @@
 <?php session_start();?>
-<div ng-hide="activeRow" class="center header"><img src="images/loading.gif"></img></div>
+<!-- <div ng-hide="activeRow" class="center header"><img src="images/loading.gif"></img></div> -->
 <!-- <div class="row content" ng-show="activeRow">	
 	<div class="row pull-left">	 -->  	  
-	   <div sidebar-nav active="" col="2"></div>
-	   <div id="videoNode" class="row col-md-6">
+   <div sidebar-nav active="" col="2"></div>
+   <div id="videoNode" class="row col-md-6" ng-init="show='about'">
 		<div class="videoWrapper row">
 			<!-- Copy & Pasted from YouTube -->			
 			<iframe width="100%" height="100%" src="http://www.youtube.com/embed/{{activeRow.videoId}}?autoplay=0&modestbranding=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen></iframe>
 		</div>
+		<!-- http://www.youtube.com/embed/{{activeRow.videoId}}?autoplay=0&modestbranding=1&rel=0&wmode=transparent -->
 	   <!-- </div>
 	   <div id="videoNode" class="row col-md-6"> -->
-	    <div class="row boxed no-shadow has-padding redHover" ng-init="newRow.rating=[];">
+	    
 			<!--a><i class="glyphicon glyphicon-arrow-right"></i></a-->
 			<!-- <div class="center" ng-hide="tags.length>0"><img ng-class="" ng-src="../images/small_loading.gif"></img></div> -->
-			<div class="row">
-				<div class="btn-group cleanTagBox" data-toggle="buttons" ng-show="tags.length>0">					  
-				  <label class="btn" ng-show="primaryPick" title="Remove Rank" ng-class="{true:'active',false:'false'}[primaryPick.tagId==primary.tagId]" ng-click="removeTag('primary');"><i class="glyphicon glyphicon-remove"></i>
-					<input type="radio" ng-hide="true"><span ng-show="primary.tagId==5"></input>
-				  </label>
-				  <label class="btn" title="{{primary.name}}" ng-repeat="primary in primaryTags | limitTo:3" ng-class="{true:'active',false:'false'}[primaryPick.tagId==primary.tagId]" ng-click="resetRateBar(primary);"><i class="glyphicon" ng-class="{1:'glyphicon-thumbs-up',2:'glyphicon-thumbs-down',3:'glyphicon-minus'}[primary.tagId]"></i>
-					<input type="radio" ng-model="pick" ng-hide="true" value="{{primary.name}}"><span ng-show="primary.tagId==1">{{primary.name}}<span></input>
-				  </label>
-				  <label class="btn-padding">
-					<a href="">Ask me later</a>
-				  </label>
-				</div>				
+		<div class="row boxed-left boxed-right boxed-bottom">				
+			<div class="container">
+				<h3 id="pageTitle">{{activeRow.videoInfo.snippet.title}}</h3>
+				<div class="row" ng-init="hoverPrimary=false" ng-mouseover="hoverPrimary=true" ng-mouseleave="hoverPrimary=false">
+					 <label class="btn col-md-1" ng-show="primaryPick&&hoverPrimary" ng-class="{true:'active',false:'false'}[primaryPick.tagId==primary.tagId]" popover="Remove rank" popover-trigger="mouseenter" popover-placement="right" ng-click="removeTag('primary');"><i class="glyphicon glyphicon-remove"></i>
+						<input type="radio" ng-hide="true"><span ng-show="primary.tagId==5"></input>
+					 </label>
+					 <span class="col-md-1" ng-show="!primaryPick&&hoverPrimary">&nbsp;</span>
+					<div class="btn-group cleanTagBox" ng-class="{'false':'col-md-offset-1'}[hoverPrimary]" data-toggle="buttons" ng-show="tags.length>0">
+					  <label class="btn" title="{{primary.name}}" ng-repeat="primary in primaryTags | limitTo:3" ng-class="{true:'active',false:'false'}[primaryPick.tagId==primary.tagId]" ng-click="resetRateBar(primary)"><i class="glyphicon" ng-class="{1:'glyphicon-thumbs-up',2:'glyphicon-thumbs-down',3:'glyphicon-minus'}[primary.tagId]"></i>
+						<input type="radio" ng-model="pick" ng-hide="true" value="{{primary.name}}"><span ng-show="primary.tagId==1">{{primary.name}}<span></input>
+					  </label>
+					  <label class="btn-padding">
+						<a href="" ng-click="addToLater()" ng-hide="addedToLaterList">Ask me later</a>
+						<span ng-show="addedToLaterList">Added to rank later list</span>
+					  </label>
+					</div>
+					<div class="container">
+						<div class="btn-group side-boxed pull-right boxed" data-toggle="buttons">
+						  <label class="btn" ng-class="{true:'active',false:'false'}[show=='about']" ng-click="show='about'">
+							<input type="radio" ng-model="pick" ng-hide="true"> About</input>
+						  </label>
+						  <label class="btn" ng-class="{true:'active',false:'false'}[show=='rank']" ng-click="show='rank'">
+							<input type="radio" ng-model="pick" ng-hide="true"> Rank</input>
+						  </label>							  
+						</div>
+					</div>				
+				</div>	
+			</div>			
+		</div>
+		<div class="row boxed-bottom boxed-left boxed-right" ng-show="show=='about'">
+			<br/>
+			<div class="container">
+				<div divto-disqus="activeRow.videoInfo.snippet.title" ng-show="true"></div>				
+				<ul class="metaInfo">
+					<li>by: <a href="{{ytLink_user}}{{activeRow.videoInfo.snippet.channelTitle}}" target="_blank" class="linkSmallBlack"><span class="label label-success">{{activeRow.videoInfo.snippet.channelTitle}}</span></a></li>
+					<li>&bull; <span ng-class="{snippet.publishedAt:'label label-warning'}[currentSort.sorttext]">{{activeRow.videoInfo.snippet.publishedAt | date:'MMM d yyyy'}}</span></li>
+					<li>&bull; <span ng-class="{statistics.viewCount:'label label-warning'}[currentSort.sorttext]">{{activeRow.videoInfo.statistics.viewCount | number}} Views</span></li>										
+				</ul>
+				<p>
+					<span ng-hide="showMore" class="hideOverflow descShort">{{activeRow.videoInfo.snippet.description}}</span>
+					<pre class="cleanPre" ng-show="showMore">{{activeRow.videoInfo.snippet.description}}</pre>
+					<a href="" ng-click="showMoreFunc()">{{showMoreText}}</a>
+				</p>					
 			</div>
+		</div>
+		<div ng-show="show=='rank'" class="row boxed-bottom boxed-left boxed-right no-shadow has-padding no-padding-top redHover">
 			<div class="row col-md-12">
 				<br ng-show="primaryPick"/>
 				<div ng-show="primaryPick&&primaryPick.tagId!=3" class="container has-padding-sm">
-					<div class="container col-md-4" ng-show="tags.length>0">
+					<div class="container col-md-3" ng-show="tags.length>0">
 						<h5>How {{primaryPick.name}}<span ng-hide="primaryPick.prefix">?</span></h5>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-9">
 						<div class="clean-dropdown boxed">
 					      <select class="clean-dropdown-select boxed" ng-model="primaryPick.selectedLevel" ng-options="i.level as i.defaultName for i in primaryPick.intensity">
 					      	<option value="">Select...</option>
@@ -40,19 +75,20 @@
 					    </div>
 					</div>
 				</div>
-				<hr/>
+				<hr ng-show="primaryPick&&primaryPick.tagId!=3"/>
 				<!-- <pre>{{secondaryPick|json}}</pre> -->
-				<div class="container has-padding-sm">
-					<div class="container col-md-4" ng-show="tags.length>0">
+				<div class="container has-padding-sm" ng-init="hoverCopyright=false" ng-mouseover="hoverCopyright=true" ng-mouseleave="hoverCopyright=false">
+					<div class="container col-md-3" ng-show="tags.length>0">
 						<h5>Copyright </h5>
 					</div>
-					<div class="col-md-8">
-						<div class="">
+					<div class="col-md-9">
+						<div class="col-md-10">
 							<div class="btn-group side-boxed" data-toggle="buttons">
 							  <label class="btn" ng-repeat="secondary in secondtags" ng-class="{true:'active',false:'false'}[secondary.tagId==secondaryPick.tagId]" ng-click="selectSecondary(secondary)">
 								<input type="radio" ng-model="pick" ng-hide="true"> {{secondary.name}}</input>
-							  </label> 			  
-							</div>
+							  </label>							  
+							</div>							
+							<button type="button" popover="Remove rank" popover-trigger="mouseenter" popover-placement="right" ng-show="hoverCopyright&&secondaryPick" class="btn close pull-right" aria-hidden="true" ng-click="removeTag('copyright')">&times;</button>	  							
 						</div>
 						<div ng-show="secondaryPick&&secondaryPick.name!='Maybe'">
 							<div class="clean-dropdown boxed">
@@ -62,13 +98,13 @@
 						    </div>
 						</div>
 					</div>
-				</div>				
+				</div>						
 				<hr/>
 				<div class="container has-padding-sm">
-					<div class="container col-md-4">
+					<div class="container col-md-3">
 						<h5>Language </h5>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-9">
 						<div class="">
 							<div class="btn-group boxed">				
 								<div class="inline"><select data-placeholder="&raquo;" multiple class="chzn-select languageTagBox" ng-model="language" ng-options="i as i.name for i in languageTags" chosen></select></div>
@@ -96,13 +132,16 @@
 				</div>	
 				<hr/>
 				<div class="container has-padding-sm">
-					<div class="container col-md-4">
+					<div class="container col-md-3">
 						<h5>Category </h5>
 					</div>					
-					<div class="col-md-8">
-						<div class="has-padding-sm">
-							<input type="text" class="clean-dropdown-select clean-dropdown-sm" value="Game" disabled></input>
-						</div>
+					<div class="col-md-9">
+						<div class="clean-dropdown" popover="Other category coming soon!" popover-trigger="mouseenter">
+							<!-- <input type="text" class="clean-dropdown-select clean-dropdown-sm" value="Game" disabled></input> -->						
+							<select class="clean-dropdown-select boxed">
+								<option value="">Game</option>
+							</select>
+						</div>						
 						<br/>
 						<div>
 							<div class="btn-group boxed">				
@@ -130,10 +169,10 @@
 				</div>
 				<hr/>
 				<div class="container has-padding-sm" ng-hide="true">
-					<div class="container col-md-4">
+					<div class="container col-md-3">
 						<h5>Tags </h5>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-9">
 						<div>
 							<div class="btn-group boxed">				
 								<div class="inline"><select data-placeholder="&raquo;" multiple class="chzn-select chzn-custom-style languageTagBox" ng-model="rating" ng-options="i as i.name for i in tags" chosen></select></div>
@@ -160,40 +199,20 @@
 				</div>
 				<!-- <hr/> -->
 				<div class="container has-padding-sm">
-					<div class="container col-md-4">
+					<div class="container col-md-3">
 						<h5>Tags</h5>
 					</div>
-					<div class="col-md-8">
+					<!-- {{free}} - {{freeformtags}} -->
+					<div class="col-md-9">
 						<div>
-							<!-- <tags-input ng-model="freeformtags"></tags-input>						
-		                    <input type="text" class="" placeholder="Search game here.."
-		                          typeahead-editable="false" typeahead-on-select='find($item)' ng-model="freeformtags"
-		                          typeahead="g.name for g in gameslist | filter:$viewValue | limitTo:8">
-		                    </input> -->
-		                    
-		                   <!--  <select id="e12">
-						        <option value="AL">Alabama</option>						      
-						        <option value="WY">Wyoming</option>
-						    </select> -->
-						    <input class="col-md-12 selectTagBox" ng-model="free" ng-data="freeformtags"></input>
-							<!-- {{free}}<br/>
-							{{freeformtags}} -->
+						    <input class="col-md-12 selectTagBox" ng-model="free" ng-data="freeformtags" placeholder="&raquo;"></input>
 						</div>						
 					</div>					
 				</div>
 				<!-- <hr/> -->
-			</div>
-			<script type="text/javascript">
-				// $(".selectTagBox").select2({tags:["red", "green", "blue"]});		
-			</script>							
-			<span class="label pull-right" ng-class="{'label-success':saveStatus=='Saved!','label-danger':saveStatus=='Saving...'}">{{saveStatus}}</span>			
-			<!-- <div class="inline">
-				<h4 class="tagBoxed inline">Top tags: &nbsp;&nbsp;<span class="label label-danger" ng-hide="tagCounts">Not ranked yet</span></h4>
-				<span class="boxed tagBoxed" ng-repeat="topTags in (tagCounts | orderBy : 'tagCount' : true) | limitTo: 3">
-					{{topTags.tagFullName}}
-				</span>
-			</div>	 -->	
-			<hr/>
+			</div>						
+			<span class="label pull-right" ng-class="{'label-success':saveStatus=='Saved!','label-danger':saveStatus=='Saving...'}">{{saveStatus}}</span>
+			<!-- <hr/>
 			<div class="container">
 				<div divto-disqus="activeRow.videoInfo.snippet.title" ng-show="true"></div>
 				<a><h3 id="pageTitle">{{activeRow.videoInfo.snippet.title}}</h3></a>
@@ -208,12 +227,13 @@
 					<a href="" ng-click="showMoreFunc()">{{showMoreText}}</a>
 				</p>					
 			</div>
-			<hr/>
-			<div id="disqus_thread"></div>
-		</div>						
-	  </div>
-
-  <div id="listNode" class="col-md-4 .has-indent">		
+			<hr/> -->
+			
+		</div>
+		<br/>
+		<div id="disqus_thread"></div>
+	</div>
+	<div id="listNode" class="col-md-4 .has-indent">		
 		<div ng-show="suggestRated">		
 			<div class="container sidebar-videos" ng-repeat="video in suggestRated">
 				<div class="col-md-4 no-padding">						
@@ -242,6 +262,7 @@
 			<hr/>
 		</div>
 	</div>		
+  	
 	<script type="text/javascript">  
 		/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
 			 // required: replace example with your forum shortname

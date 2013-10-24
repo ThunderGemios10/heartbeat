@@ -40,21 +40,22 @@ function channelController($scope, $timeout, $location, $rootScope, $filter, ses
 					if(outDetails.index==0) {
 						// $scope.activeRow.videoInfo = outDetails[0][0];
 					}
-					$scope.channelVideos[outDetails.index].videoInfo = outDetails[0][0];							
+					$scope.channelVideos[outDetails.index].videoInfo = outDetails[0][0];
 				});
 				i++;
 			});
 		});
-		
-		databaseService.getRankedVideoByUser().then(function(result){			
+		$scope.ajaxCounter = -1;
+		databaseService.getRankedVideoByUser().then(function(result){
 			var videoList = [];
-			$scope.rankedVideos = [];
+			$scope.tempRankedVideos = [];
 			$scope.videoList = result;
 			angular.forEach(result,function(video){
 				videoList.push({videoId:video.videoId});
 			});
 			$scope.videoListToPass = videoList;
-			databaseService.getVideo($scope.videoListToPass).then(function(result){				
+			databaseService.getVideo($scope.videoListToPass).then(function(result){
+				$scope.ajaxCounter = result.length;			
 				angular.forEach(result,function(item){
 					var keepGoing = true;
 					angular.forEach($scope.videoList,function(list){
@@ -84,7 +85,7 @@ function channelController($scope, $timeout, $location, $rootScope, $filter, ses
 											item.groupedvideotags['language'].push(tagstype);	
 										}
 									});
-									$scope.rankedVideos.push(item);									
+									$scope.tempRankedVideos.push(item);									
 								});
 							}
 						}
@@ -92,6 +93,13 @@ function channelController($scope, $timeout, $location, $rootScope, $filter, ses
 				});							
 			});
 		});
-	}	
+	}
 	$scope.getUserRankedVideos();
+	$scope.$watch('[tempRankedVideos, ajaxCounter]',function(value){
+		if(value[0]) {
+			if(value[0].length==value[1]) {			
+				$scope.rankedVideos = $scope.tempRankedVideos;
+			}
+		}	
+	},true);
 }
