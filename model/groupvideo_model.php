@@ -54,7 +54,7 @@ function getGroupVideo($groupId,$filter,$start,$limit) {
 	';
 	$result = mysql_query($query);
 	while($row = mysql_fetch_assoc($result)){		
-		$contents = file_get_contents('http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/video_mongomodel.php?vid='.$row["videoId"]);		
+		$contents = file_get_contents('http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/video_mongomodel.php?vid='.$row["videoId"]);
 		// var_dump($contents);
 		$tempRow["videoInfo"] = json_decode($contents);
 		$tempRow["videoId"] = $row["videoId"];

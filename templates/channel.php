@@ -19,7 +19,8 @@
 					<div id="listNode" class="col-md-5">
 						<div class="row">
 							<div>								
-								<h4><a title="{{activeRow.videoInfo.snippet.title}}" href="#!/play/{{activeRow.videoInfo.id}}">{{activeRow.videoInfo.snippet.title}}</a></h4>							</div>
+								<h4><a title="{{activeRow.videoInfo.snippet.title}}" href="#!/play/{{activeRow.videoInfo.id}}">{{activeRow.videoInfo.snippet.title}}</a></h4>
+							</div>
 							<small>
 								<ul class="metaInfo">
 									<li>by: {{activeRow.videoId}} <a href="{{ytLink_user}}{{activeRow.videoInfo.snippet.channelTitle}}" target="_blank" class="linkSmallBlack">{{activeRow.videoInfo.snippet.channelTitle}}</a></li>
@@ -55,7 +56,7 @@
 				</div>
 			</div>
 			<div ng-show="channelVideos.length<1" class="has-padding-sm boxed-bottom boxed-left boxed-right has-padding-vertical">
-				<a class="btn btn-lg btn-primary" href="">You don't have video yet on your channel.</a>
+				<a class="btn btn-lg btn-primary" href="">You don't have video yet on your YouTube channel.</a>
 			</div>	
 			<!-- <pre>{{rankedVideos|json}}</pre> -->
 			<div class="container boxed-bottom boxed-left boxed-right no-padding no-margin has-padding-vertical">				

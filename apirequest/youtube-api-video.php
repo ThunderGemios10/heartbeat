@@ -1,22 +1,13 @@
 <?php
-//this program accepts an array of youtubURLS as an input.
-//It outputs information about the videos and channel info
-//Format:JSON 
-
 ini_set('max_execution_time', 3000);
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata); //convert the JSON to php object
-//$ids = $request->ids;  //$ids is now an array of IDs
-
 
 function queryVideos($ids){
 	require 'include/oauth_instance.php';
 	$csv_ids = generateCsv($ids);
-	$searchResponse = $youtube->videos->listVideos('id,snippet,statistics',
-		array('id' => $csv_ids,
-			'fields' => 'items(id,snippet(title,description,publishedAt,channelId,channelTitle,thumbnails(medium)),statistics)'
-	));
+	$searchResponse = $youtube->videos->listVideos('id,snippet,statistics',array('id' => $csv_ids,'fields' => 'items(id,snippet(title,description,publishedAt,channelId,channelTitle,thumbnails(medium)),statistics)'));
 	return $searchResponse["items"];
 }
 

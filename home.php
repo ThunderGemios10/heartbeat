@@ -42,6 +42,8 @@ if(!(isset($_SESSION["valid"]))) {
 	<script src="js/ui-jq.js"></script>
 	<script src="js/adminController.js"></script>
 	<script src="js/groupController.js"></script>
+	<script src="js/ranklaterController.js"></script>
+	<script src="js/usertagslistController.js"></script>
 	<script src="component/ngTagsInput/ng-tags-input.js"></script>
 	<script src="component/select2/select2.min.js"></script>	
 
