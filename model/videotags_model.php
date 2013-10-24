@@ -157,7 +157,7 @@ function getVideoTags($videoId,$type) {
 						ON VPU.id = TPV.videoperuserId 
 					INNER JOIN tbl_tags T 
 						ON T.id = TPV.tagId	
-					LEFT JOIN tbl_intensityPerTag IPT 
+					LEFT JOIN tbl_intensitypertag IPT 
 						ON IPT.tagId = T.id 
 							AND IPT.level = TPV.tagLevel				
 				WHERE videoId = "'.$videoId.'"
@@ -173,7 +173,7 @@ function getVideoTags($videoId,$type) {
 						ON VPU.id = TPV.videoperuserId 
 					INNER JOIN tbl_tags T 
 						ON T.id = TPV.tagId
-					LEFT JOIN tbl_intensityPerTag IPT 
+					LEFT JOIN tbl_intensitypertag IPT 
 						ON IPT.tagId = T.id 
 							AND IPT.level = TPV.tagLevel				
 				WHERE videoId = "'.$videoId.'"
@@ -189,7 +189,7 @@ function getVideoTags($videoId,$type) {
 						ON VPU.id = TPV.videoperuserId 
 					INNER JOIN tbl_tags T 
 						ON T.id = TPV.tagId
-					LEFT JOIN tbl_intensityPerTag IPT 
+					LEFT JOIN tbl_intensitypertag IPT 
 						ON IPT.tagId = T.id
 							AND IPT.level = TPV.tagLevel
 				WHERE videoId = "'.$videoId.'"
@@ -206,7 +206,7 @@ function getVideoTags($videoId,$type) {
 						ON VPU.id = TPV.videoperuserId 
 					INNER JOIN tbl_tags T 
 						ON T.id = TPV.tagId
-					LEFT JOIN tbl_intensityPerTag IPT 
+					LEFT JOIN tbl_intensitypertag IPT 
 						ON IPT.tagId = T.id 
 							AND IPT.level = TPV.tagLevel
 				WHERE videoId = "'.$videoId.'"

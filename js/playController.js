@@ -264,37 +264,37 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 			$scope.tagReady1 = true;
 			databaseService.getCurrentVideoUserFreeTags($scope.activeRow.videoId).then(function(vidtags){	
 				$scope.free = vidtags;
-			databaseService.getVideoTags($scope.activeRow.videoId,2).then(function(vidtags){				
-				$scope.userVidTags = vidtags;
-				$scope.rating = [];	
-				angular.forEach($scope.userVidTags,function(vidTags){
-					var keepGoing = true;
-					angular.forEach($scope.tags,function(vt){
-						if(keepGoing){	
-							console.log(vt["tagId"]+"======"+vidTags["tagId"]);											
-							if(vt["tagId"]==vidTags["tagId"]) {
-								var keepGoing2 = true;
-								vt.selectedLevel = null;
-								vt.prefix="";
-								angular.forEach(vt.intensity,function(intensity){
-									if(keepGoing2){
-										// console.log(intensity);
-										// console.log('2'+intensity.level+" == "+vidTags["tagLevel"]);
-										if(intensity.level==vidTags["tagLevel"]) {
-											vt.selectedLevel = vidTags["tagLevel"];
-											// console.log(intensity.defaultName);
-											vt.prefix = intensity.defaultName;											
+			// databaseService.getVideoTags($scope.activeRow.videoId,2).then(function(vidtags){				
+			// 	$scope.userVidTags = vidtags;
+			// 	$scope.rating = [];	
+			// 	angular.forEach($scope.userVidTags,function(vidTags){
+			// 		var keepGoing = true;
+			// 		angular.forEach($scope.tags,function(vt){
+			// 			if(keepGoing){	
+			// 				console.log(vt["tagId"]+"======"+vidTags["tagId"]);											
+			// 				if(vt["tagId"]==vidTags["tagId"]) {
+			// 					var keepGoing2 = true;
+			// 					vt.selectedLevel = null;
+			// 					vt.prefix="";
+			// 					angular.forEach(vt.intensity,function(intensity){
+			// 						if(keepGoing2){
+			// 							// console.log(intensity);
+			// 							// console.log('2'+intensity.level+" == "+vidTags["tagLevel"]);
+			// 							if(intensity.level==vidTags["tagLevel"]) {
+			// 								vt.selectedLevel = vidTags["tagLevel"];
+			// 								// console.log(intensity.defaultName);
+			// 								vt.prefix = intensity.defaultName;											
 												
-											keepGoing2 = false;
-											$scope.savingStatus = 1;
-										}
-									}
-								});	
-								$scope.rating.push(vt);											
-							}
-						}	
-					});
-				});				
+			// 								keepGoing2 = false;
+			// 								$scope.savingStatus = 1;
+			// 							}
+			// 						}
+			// 					});	
+			// 					$scope.rating.push(vt);											
+			// 				}
+			// 			}	
+			// 		});
+			// 	});				
 				$scope.tagReady2 = true;
 				databaseService.getVideoTags($scope.activeRow.videoId,3).then(function(vidtags){
 					// console.log('type level 3');
@@ -389,7 +389,7 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 						});
 					});
 				});
-			});
+			// });
 			});		
 		});
 		
