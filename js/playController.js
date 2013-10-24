@@ -6,8 +6,8 @@ function playController($scope, $timeout, $location, $rootScope, $filter, sessio
 		databaseService.getAllTags("json").then(function(result){
 			$scope.primaryRank = result;
 		});
-     
-     
+     	////
+
 		$scope.freeformtagss = [
 			"Dota"
 			,"Dota 2"
