@@ -2,7 +2,7 @@
 
 $host="localhost"; // Host name 
 $username="anytv_robert"; // Mysql username 
-$password="=}D3]*LT3^%@2"; // Mysql password 
+$password="~[TA+U=l!v1q"; // Mysql password new ---- "~[TA+U=l!v1q"
 $db_name="anytv_heartbeat_db"; // Database name 
 
 // Connect to server and select database.
