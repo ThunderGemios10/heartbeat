@@ -23,7 +23,7 @@ function channelController($scope, $timeout, $location, $rootScope, $filter, ses
 			$scope.showMore=true;
 		}
 	}
-	$scope.getUserRankedVideos = function(){
+	$scope.refresh = function(){
 		youtubeService.getVideosFromChannel().then(function(result){
 			$scope.channelVideos = [];
 			$scope.activeRow = {};
@@ -94,7 +94,7 @@ function channelController($scope, $timeout, $location, $rootScope, $filter, ses
 			});
 		});
 	}
-	$scope.getUserRankedVideos();
+	$scope.refresh();
 	$scope.$watch('[tempRankedVideos, ajaxCounter]',function(value){
 		if(value[0]) {
 			if(value[0].length==value[1]) {			

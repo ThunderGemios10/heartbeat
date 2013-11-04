@@ -1,100 +1,137 @@
+
+
 <?php
-	// header('Cache-Control: private, max-age=0');
-	// header('Expires: -1');
-	// header('Content-Type: text/html; charset=UTF-8');
-	session_start();
-	if(isset($_SESSION["valid"])) {		
-		header("location: home.php");
-	}
-?>
 
-<!DOCTYPE html>
-<html lang="en" ng-app="videoTracker">
-  <head>
-    <meta charset="utf-8">
-	<title>Heartbeat</title>	
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-	
-	<!--link rel="stylesheet" href="css/main.css"-->
-	<!--link rel="stylesheet" href="component/bootstrap/bootstrap.css"/-->
-	<!-- <link rel="icon" type="image/ico" href="favicon.ico"> -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="component/bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="component/bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="component/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-  <link rel="shortcut icon" href="component/bootstrap/assets/ico/favicon.png">
-    <!-- Le styles -->	
-  <link href="component/bootstrap/css/bootstrap.css" rel="stylesheet">
-	<link href="css/main.css" rel="stylesheet">	
-    <!--link href="component/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"-->
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="../assets/js/html5shiv.js"></script>
-    <![endif]-->
+session_start();
+if(!(isset($_SESSION["valid"]))) {
+		// header("location: error.php");
+	// echo '1'; exit;
+	// require "index-notsignedin.php";
+	 include 'header.php' ;
+	 include 'navigation.php';
+	 // echo '<div ng-view></gmp_div() >';
 
-    <!-- Fav and touch icons -->
-  </head>
+	 echo '
+	 	<div class="content">
+			<section id="coa">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-3"></div>
+						<div class="col-lg-6">
+							<div class="message">
+								<div class="message-header">
+									<p><img src="images/hb-logo-coa.png"> Heart<span>beat</span></p>
+								</div>
+								<div class="message-subtitle">
+									<p>Dating for YouTubers!</p>
+								</div>
+								<div class="message-footer">							
+									<a id="explore2" href="" scrollto="#lt-pulse" class="btn btn-default btn-lg btn-lrn">Learn more</a>					
+									<a href="login.php" class="btn btn-default btn-lg btn-gplus">Sign in with Google+</a> 
+									<a href="sneakpeek.php" class="btn btn-default btn-lg btn-lrn">Sneak peek</a>			
+								</div>
+							</div>
+							<div class="col-lg-3"></div>
+						</div>
 
-  <body>
-    <div id="wrap">
-          <div class="navbar navbar-fixed-top no-border no-padding">
-            <nav class="navbar navbar-default no-margin no-border" role="navigation">    
-              <div class="navbar-header">        
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>   
-                <a class="navbar-brand less-padding-vertical" href="#"><img src="images/heartbeat-logo.png" height="22"></img></a>                    
-               </div>
-               <div class="collapse navbar-collapse navbar-ex1-collapse no-margin reduce-height">                         
-                   <ul class="nav navbar-nav">
-                      <li class="active" data-match-route=""><a href="#">Login Page</a></li>
-                      <li data-match-route="/about"><a href="http://www.any.tv">any.TV</a></li>
-                      <li data-match-route="/about"><a href="http://www.youtube.com">YouTube</a></li>
-                  </ul>
-                </div>             
-            </nav>
-          </div>
-          <div class="container">
-                <div class="jumbotron no-border-radius">
-                   <h1>Hello, YouTubers!<a href="login.php" class="pull-right"><img src="images/googleBtn.png" width="400"></img></a></h1>
-                   <p>Welcome to the Heartbeat.TM! </p>
-                   <p>The new site for You, a Dating for YouTubers!</p>             
-                </div>
-                <div class="row">
-                  <div class="col-6 col-sm-6 col-lg-4">
-                    <h3><li class="icon-search"></li> Realtime YouTube Search</h3>
-                    <p>Find your videos right here, right now! awesome real-time search straight from youtube's to this super-cool-awesome app greatly reduces waiting time for queues so you get what you search for instantly! well, most of the time anyways. </p>
-                    <!-- <p><a class="btn btn-default" href="#">View details &raquo;</a></p> -->
-                  </div><!--/span-->
-                  <div class="col-6 col-sm-6 col-lg-4">
-                   <h3><li class="icon-hdd"></li> Search your rated videos</h3>
-                  <p>Search a video, rate it, comment on it and save it on the database! this tool helps save a ridiculous amount of time in indexing and sorting out videos. This allows for much more convenient searches, from youtube and from our database as well. but don't take my word for it, really, don't. no seriously. really. just try it out and let the magic come to you.</p>
-                    <!-- <p><a class="btn btn-default" href="#">View details &raquo;</a></p> -->
-                  </div><!--/span-->
-                  <div class="col-6 col-sm-6 col-lg-4">
-                     <h3><li class="icon-star"></li> Powered by AngularJS</h3>
-                  <p>This tool is powered by the most super-heroic of all super-heroic framework. Angularjs provides this app with the realtime searches you need all the while maintaining ease of use and user friendliness. Thanks AngularJs! you're my hero!</p>
-                    <!-- <p><a class="btn btn-default" href="#">View details &raquo;</a></p> -->
-                  </div><!--/span-->            
-                </div><!--/row-->
-                <footer>
-                  <p class="pull-right">any.TV Limited</P>
-                </footer>  
-          </div>  
+					</div>
+				</section>
 
-    </div>
-   
+				<section id="lt-pulse">
+					<div class="container">
+						<div class="row">
+							<div class="latest-pulse">
+								<div class="title">
+									<h1>Latest Heartbeats</h1>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->	
-	<script src="component/jquery/jquery.js"></script>
-    <script src="component/bootstrap/js/bootstrap.min.js"></script>
-  </body>
-</html>
+								</div>
+								<div class="body">
+									<div class="col-lg-3"><img src="images/pulse-video-1.jpg"><p><h3>Video Title</h3><span>/username</span></p></div>
+									<div class="col-lg-3"><img src="images/pulse-video-2.jpg"><p><h3>Video Title</h3><span>/username</span></p></div>
+									<div class="col-lg-3"><img src="images/pulse-video-3.jpg"><p><h3>Video Title</h3><span>/username</span></p></div>
+									<div class="col-lg-3"><img src="images/pulse-video-4.jpg"><p><h3>Video Title</h3><span>/username</span></p></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section id="hb-feat">
+					<div class="container">
+						<div class="row">
+							<div class="feat">
+								<div class="title"></div>
+								<div class="body">
+									<div class="col-lg-4">
+										<i class="fa fa-youtube-play fa-6x"></i>
+										<h1>Watch</h1>
+										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+										tempor incididunt ut labore et dolore magna aliqua.</p>
+									</div>
+									<div class="col-lg-4">
+										<i class="fa fa-level-up fa-6x"></i>
+										<h1>Rank</h1>
+										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+										tempor incididunt ut labore et dolore magna aliqua.</p>								
+									</div>
+									<div class="col-lg-4">
+										<i class="fa fa-group fa-6x"></i>
+										<h1>Connect</h1>
+										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+										tempor incididunt ut labore et dolore magna aliqua.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section id="about">
+					<div class="container">
+						<div class="row">
+						<div class="ab-hb">
+						<div class="col-lg-6">
+							<div class="title">
+								<h1>Heart<span>beat</span> is in development.</h1>
+								<h2>Help us grow!</h2>
+								<a href="login.php" class="btn btn-default btn-lg">Spread it like peanut butter!</a>
+							</div>					
+						</div>
+						<div class="col-lg-6">
+							<div class="body">
+							  <div class="stage">
+							  <div class="circle"></div>
+							    <div class="heart">
+							      <div class="left"></div>
+							      <div class="right"></div>
+							    </div>  
+							</div>							
+							</div>					
+						</div>
+
+						</div>
+						</div>
+					</div>
+				</section>
+
+		<!-- 		<section id="slide5">
+					
+				</section> -->
+			</div>
+	 ';
+	 include 'footer.php';
+	// require 'index-signedin.php';
+}
+else {
+	// echo '2'; exit;
+	// $_SESSION["guest"]=true;
+	include 'index-signedin.php';
+	 // include 'header.php' ;
+	 // include 'navigation.php';
+	 // echo '<div ng-view></div>';
+	 // include 'footer.php';
+}
+
+ ?>
+

@@ -5,5 +5,5 @@ unset($_SESSION["state"]);
 unset($_SESSION["token"]);
 unset($_SESSION["userinfo"]);
 unset($_SESSION["valid"]);
-header("location: index.php");
+header("location: .");
 ?>

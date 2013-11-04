@@ -2,10 +2,10 @@
 	<div sidebar-nav active="anyTV" col="2"></div>
 	<div class="col-md-8 pull-left">
 		<div class="row">
-			<div class="no-border-radius whiteHover groupBanner"style="background-image: url(uploads/groupBanner/anyTV.jpg); background-size:cover; background-position:center center;">		       
-		    </div>
-		     <h2>{{groupId}}</h2>
-		     <p>{{groupInfo.description}}</p>
+			<div class="no-border-radius whiteHover groupBanner boxed"style="background-image: url(uploads/groupBanner/{{groupInfo.bannerLink}}); background-size:cover; background-position:center center;"></div>
+		     <h2>{{groupInfo.groupAltName}}</h2>
+		     <p>{{groupInfo.groupDescription}}</p>
+		     <!-- {{groupInfo.bannerLink}} -->
 		</div>
 		<div class="row" id="topList">
 			<tabset class="group-filter-menu">
