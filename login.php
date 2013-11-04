@@ -60,7 +60,7 @@ else {
 				$_SESSION["valid"] = true;
 				$_SESSION["userlevel"] = $convertedObj[0]["authtype"];
 				$_SESSION["userId"] = $convertedObj[0]["_id"];
-				header("location: home.php");
+				header("location: .");
 			}
 			else {
 				$insert = array(
@@ -75,7 +75,7 @@ else {
 				$_SESSION["valid"] = true;
 				$_SESSION["userlevel"] = 'user';
 				$_SESSION["userId"] = $insert["_id"];
-				header("location: home.php");
+				header("location: .");
 				// var_dump($insert);
 				// $userdomain = $_SESSION["userinfo"]["hd"];
 				// $cursor = $collectionAuthuser->find(array(

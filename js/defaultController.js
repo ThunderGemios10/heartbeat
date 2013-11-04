@@ -1,6 +1,40 @@
-function defaultController($scope, $rootScope, $location, sessionService, $routeParams, $http, databaseService, youtubeService, sessionService, DataService,$filter,$resource) {
+function defaultController($scope, $rootScope, $location, sessionService, $routeParams, $http, databaseService, youtubeService, sessionService, DataService,$filter,$resource) {	
+	$scope.filterSelection = [
+		{id:"default", value:"All"}
+		,{id:"youtube", value:"YouTube"}
+		,{id:"divider", value:"divider"}		
+	];
+	$scope.selectedFilter = $scope.filterSelection[0];
+	$scope.filterChange = function (idx) {
+		$scope.selectedFilter = $scope.filterSelection[idx];
+	}
+	$rootScope.$watch('page',function(){
+		console.log($rootScope.page);
+		if($rootScope.page=="ytsearch") {
+			$scope.filterByPage = "youtube";
+		}
+		else if($rootScope.page=="dbsearch") {
+			$scope.filterByPage = "default";
+		}
+		angular.forEach($scope.filterSelection,function(filter){
+			var keepGoing = true;
+			if(keepGoing) {
+				if($scope.filterByPage==filter.id) {
+					$scope.selectedFilter = filter;
+					keepGoing = false;
+				}
+			}
+		});	
+	});
+
 	$scope.searchDelay = function(str) {
-		$location.path("/search/"+str);
+		console.log($scope.selectedFilter);
+		if($scope.selectedFilter.id=='default') {
+			$location.path("/search/"+str);
+		}
+		else if($scope.selectedFilter.id=='youtube') {
+			$location.path("/live/"+str);
+		}
 	};
 	// console.log($rootScope);
 	// $scope.search = function(str) {
@@ -14,9 +48,30 @@ function defaultController($scope, $rootScope, $location, sessionService, $route
 		}
 	});
 
-	// console.log($rootScope.channelPhoto);
+	databaseService.getGroups().then(function(result){
+  		// // console.log('sidebarNav');
+  		console.log($scope.groups);
+  		
+  		$scope.groups = result;
+  		angular.forEach(result,function(group){
+  			console.log(group);
+  			
+			$scope.filterSelection.push({id:group.groupId, value:group.groupAltName});			
+		});	
+
+  	});
 	
-	$rootScope.page = "home";
+	$scope.$on('$routeChangeSuccess', function () {
+		if($scope.groups) {
+			$scope.routeParam = $location.path().split("/")[2];
+	        angular.forEach($scope.groups,function(group){
+				if($scope.routeParam==group.groupId) {
+					$scope.selectedFilter = {id:group.groupId, value:group.groupAltName};
+				}
+			});
+		}        
+    });
+	
 	$scope.page = $rootScope.page;
 	$scope.sortBy = [
 		{sortname: '--Sort--',sorttext:'',reverse:''}

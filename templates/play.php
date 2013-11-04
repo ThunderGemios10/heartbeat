@@ -16,22 +16,23 @@
 			<!-- <div class="center" ng-hide="tags.length>0"><img ng-class="" ng-src="../images/small_loading.gif"></img></div> -->
 		<div class="row boxed-left boxed-right boxed-bottom">				
 			<div class="container">
-				<h3 id="pageTitle">{{activeRow.videoInfo.snippet.title}}</h3>
+				<br/>
 				<div class="row" ng-init="hoverPrimary=false" ng-mouseover="hoverPrimary=true" ng-mouseleave="hoverPrimary=false">
-					 <label class="btn col-md-1" ng-show="primaryPick&&hoverPrimary" ng-class="{true:'active',false:'false'}[primaryPick.tagId==primary.tagId]" popover="Remove rank" popover-trigger="mouseenter" popover-placement="right" ng-click="removeTag('primary');"><i class="glyphicon glyphicon-remove"></i>
+					 <!-- <label class="btn col-md-1" ng-show="primaryPick&&hoverPrimary" ng-class="{true:'active',false:'false'}[primaryPick.tagId==primary.tagId]" popover="Remove rank" popover-trigger="mouseenter" popover-placement="right" ng-click="removeTag('primary');"><i class="glyphicon glyphicon-remove"></i>
 						<input type="radio" ng-hide="true"><span ng-show="primary.tagId==5"></input>
 					 </label>
-					 <span class="col-md-1" ng-show="!primaryPick&&hoverPrimary">&nbsp;</span>
-					<div class="btn-group cleanTagBox" ng-class="{'false':'col-md-offset-1'}[hoverPrimary]" data-toggle="buttons" ng-show="tags.length>0">
-					  <label class="btn" title="{{primary.name}}" ng-repeat="primary in primaryTags | limitTo:3" ng-class="{true:'active',false:'false'}[primaryPick.tagId==primary.tagId]" ng-click="resetRateBar(primary)"><i class="glyphicon" ng-class="{1:'glyphicon-thumbs-up',2:'glyphicon-thumbs-down',3:'glyphicon-minus'}[primary.tagId]"></i>
-						<input type="radio" ng-model="pick" ng-hide="true" value="{{primary.name}}"><span ng-show="primary.tagId==1">{{primary.name}}<span></input>
-					  </label>
-					  <label class="btn-padding">
-						<a href="" ng-click="addToLater()" ng-hide="addedToLaterList">Ask me later</a>
-						<span ng-show="addedToLaterList">Added to rank later list</span>
-					  </label>
-					</div>
+					 <span class="col-md-1" ng-show="!primaryPick&&hoverPrimary">&nbsp;</span> -->
+					
 					<div class="container">
+						<div class="btn-group cleanTagBox" ng-class="{'false':'col-md-offses-1'}[hoverPrimary]" data-toggle="buttons" ng-show="tags.length>0">
+						  <label class="btn" title="{{primary.name}}" ng-repeat="primary in primaryTags | limitTo:3" ng-class="{true:'active',false:'false'}[primaryPick.tagId==primary.tagId]" ng-click="resetRateBar(primary)"><i class="glyphicon" ng-class="{1:'glyphicon-thumbs-up',2:'glyphicon-thumbs-down',3:'glyphicon-minus'}[primary.tagId]"></i>
+							<input type="radio" ng-model="pick" ng-hide="true" value="{{primary.name}}"><span ng-show="primary.tagId==1">{{primary.name}}<span></input>
+						  </label>
+						  <label class="btn-padding">
+							<a href="" ng-click="addToLater()" ng-hide="addedToLaterList">Ask me later</a>
+							<span ng-show="addedToLaterList">Added to rank later list</span>
+						  </label>
+						</div>
 						<div class="btn-group side-boxed pull-right boxed" data-toggle="buttons">
 						  <label class="btn" ng-class="{true:'active',false:'false'}[show=='about']" ng-click="show='about'">
 							<input type="radio" ng-model="pick" ng-hide="true"> About</input>
@@ -47,7 +48,8 @@
 		<div class="row boxed-bottom boxed-left boxed-right" ng-show="show=='about'">
 			<br/>
 			<div class="container">
-				<div divto-disqus="activeRow.videoInfo.snippet.title" ng-show="true"></div>				
+				<div divto-disqus="activeRow.videoInfo.snippet.title" ng-show="true"></div>
+				<h3 id="pageTitle">{{activeRow.videoInfo.snippet.title}}</h3>
 				<ul class="metaInfo">
 					<li>by: <a href="{{ytLink_user}}{{activeRow.videoInfo.snippet.channelTitle}}" target="_blank" class="linkSmallBlack"><span class="label label-success">{{activeRow.videoInfo.snippet.channelTitle}}</span></a></li>
 					<li>&bull; <span ng-class="{snippet.publishedAt:'label label-warning'}[currentSort.sorttext]">{{activeRow.videoInfo.snippet.publishedAt | date:'MMM d yyyy'}}</span></li>
@@ -240,9 +242,11 @@
 					<a title="Play/Rate Video!" href="#!/play/{{video.videoId}}"><img class="" ng-src="{{video.videoInfo.snippet.thumbnails.medium.url}}" width="130"></img></a>
 				</div>
 				<div class="col-md-7">
-					<div class="ellipsis"><div>
-						<p><a title="{{video.videoInfo.snippet.title}}" href="#!/play/{{video.videoId}}">{{video.videoInfo.snippet.title}}</a></p>	
-					</div></div>						
+					<div class="ellipsis">
+						<div>
+							<p><a title="{{video.videoInfo.snippet.title}}" href="#!/play/{{video.videoId}}">{{video.videoInfo.snippet.title}}</a></p>	
+						</div>
+					</div>						
 					<span class="show-onhover pull-right">														
 						<a class="btn btn-small accordion-toggle" data-toggle="collapse" data-parent="#accordion_detailedview" href="#collapse_{{$index}}"><i class="icon-chevron-right"></i> </a>
 					</span>						

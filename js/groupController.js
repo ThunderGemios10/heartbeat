@@ -8,7 +8,7 @@ function groupController($scope, $window,$q, $location, databaseService, $rootSc
 	$scope.maxSize = 5;	//end-pagination	
 	$scope.itemPerPage = 10;
 	$scope.groupInfo = {
-		description:'a recommendation revenue.'
+		// description:'a recommendation revenue.'
 	}
 	$scope.tabs = [
 		{title:'Top',active:true}
@@ -27,13 +27,19 @@ function groupController($scope, $window,$q, $location, databaseService, $rootSc
 		// 	$scope.maxCount = result.maxcount;
 		// });
 	}
-	$scope.getGroups = function () {
-		var deferred = $q.defer();
+	$scope.getGroupInfo = function () {
+		databaseService.getGroupInfo($scope.groupId).then(function(result){
+			$scope.groupInfo = result;
+			console.log(result);
+		});		
+	}
+	$scope.getGroups = function () {	
 		databaseService.getGroups().then(function(result){
 			$scope.subscribedGroup = result;
-			deferred.resolve(result);
+			// deferred.resolve(result);
 		});
-		return deferred.promise;
+		// return deferred.promise;
+		$scope.getGroupInfo();
 	}
 	$scope.getGroups();
 	// $scope.getGroupVideo($scope.groupId,'top',0,$scope.itemPerPage);
