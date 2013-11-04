@@ -3,7 +3,7 @@
 <?php
 
 
-session_start();
+// session_start();
 if(!(isset($_SESSION["valid"]))) {
 		// header("location: error.php");
 	// echo '1'; exit;
