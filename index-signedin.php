@@ -1,10 +1,3 @@
-<?php
-session_start();
-if(!(isset($_SESSION["valid"]))) {
-		// header("location: error.php");
-	$_SESSION["guest"]=true;
-}
-?>
 <!DOCTYPE html>
 <html lang="en" id="ng-app" ng-app="videoTracker">
 <head>
@@ -23,7 +16,11 @@ if(!(isset($_SESSION["valid"]))) {
 	<meta name="fragment" content="!"/>
 	<script src="component/jquery/jquery.min.js"></script>
 	<script src="component/chosen/chosen.jquery.js"></script>
+
+	<script src="component/angular-file-upload/angular-file-upload-shim.js"></script>
 	<script src="js/angular.min.js"></script>		
+	<script src="component/angular-file-upload/angular-file-upload.js"></script>
+
 	<script src="js/ui-bootstrap-tpls-0.6.0.min.js"></script>
 	
 	<script src="js/defaultController.js"></script>
@@ -44,6 +41,8 @@ if(!(isset($_SESSION["valid"]))) {
 	<script src="js/groupController.js"></script>
 	<script src="js/ranklaterController.js"></script>
 	<script src="js/usertagslistController.js"></script>
+	<script src="js/youtubeSearchController.js"></script>
+	<script src="js/groupMaintenanceController.js"></script>	
 	<script src="component/ngTagsInput/ng-tags-input.js"></script>
 	<script src="component/select2/select2.min.js"></script>	
 
@@ -77,11 +76,38 @@ if(!(isset($_SESSION["valid"]))) {
 						<a class="navbar-brand mainlogo-container" href="#"><img src="images/heartbeat-logo.png" height="22"></img></a>
 					</div>
 					<div class="navbar-collapse collapse" ng-controller="defaultController">
-				        <form class="navbar-form navbar-left big-search-box" role="search" id="search" ng-submit="search(keyword)">
-				        	<div class="form-group">
+				        <form class="navbar-form navbar-left big-search-box default-width-search" role="search" id="search" ng-submit="search(keyword)">
+				        	<!-- <div class="form-group">
 				        		<input type="text" id="keyword" delayed-search class="form-control input-sm no-border-radius main-search" ng-change="resetPage()" placeholder="Search Video" ng-model="keyword" callback-search="searchDelay(arg)">
-				        	</div>
-				        	<button type="submit" class="btn no-border-radius btn-sm btn-default">&nbsp;&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-search"></i> &nbsp;&nbsp;&nbsp;&nbsp;</button>
+				        		<button type="submit" class="btn no-border-radius btn-sm btn-default margin-left-negative-sm">&nbsp;&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-search"></i> &nbsp;&nbsp;&nbsp;&nbsp;</button>
+				        	</div> -->
+				        	<div class="col-lg-12">
+							    <div class="input-group">
+							      <div class="input-group-btn input-group">
+							        <button type="button" class="btn btn-default no-border-right btn-sm dropdown-toggle hover-color-grey filter-btn" data-toggle="dropdown">
+							        	<span ng-show="selectedFilter.value">
+							        		<span class="pull-left">{{selectedFilter.value}} &nbsp;&nbsp;</span> 
+							        		<span class="pull-right">
+							        			<span class="caret"></span>
+							        		</span>
+							        	</span>
+							        </button>
+							        <ul class="dropdown-menu">
+							          <li ng-repeat="video in filterSelection" ng-class="{'divider':video.id=='divider'}"><a href="" ng-hide="video.id=='divider'" ng-click="filterChange($index)">{{video.value}}</a></li>
+							          <li ng-repeat="video in groups"><a href="" ng-click="filterChange($index)">{{video.groupAltName}}</a></li>
+							        </ul>
+							      </div><!-- /btn-group -->							    
+							       <div class="input-group col-md-12 no-padding">
+								      <input type="text" id="keyword" delayed-search class="form-control input-sm no-border-radius main-search" ng-change="resetPage()" placeholder="Search Video" ng-model="keyword" callback-search="searchDelay(arg)">
+								      <span class="input-group-btn">
+								        <button class="btn btn-default no-border-left btn-sm search-btn" type="submit">								        
+								        	<i class="glyphicon glyphicon-search"></i>
+								        </button>
+								      </span>
+								   </div><!-- /input-group -->								  
+							    </div><!-- /input-group -->
+							</div>
+
 				        	<!-- <div class="form-group dropdown"> -->
 				        		<!-- <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="">
 				        			Go to &nbsp;<span class="caret"></span>
@@ -92,13 +118,21 @@ if(!(isset($_SESSION["valid"]))) {
 				        			<li><a href="" onClick="doSwap()" ng-show="page=='play'">Swap View</a></li>
 				        		</ul> -->
 				        	<!-- </div> -->
-				        	
+				        	<!-- <pre>{{filterSelection|json}}</pre>		 -->
 				        </form>        
 				        <ul class="nav navbar-nav navbar-right">				  
 				        	<li class="dropdown">
 				        		<a class="dropdown-toggle user-menu-dropdown" title="Click to view settings" id="dLabel" role="button" data-toggle="dropdown" data-target="" href="/page.html">
 				        			<?php echo (isset($_SESSION["userinfo"]["name"])?$_SESSION["userinfo"]["name"]:""); if(isset($_SESSION["userlevel"])) if($_SESSION["userlevel"]!="guest") echo '('.$_SESSION["userlevel"].')'; ?>
-				        			<img class="no-margin" height="30" src="<?php echo $_SESSION["thumbnail"]; ?>" alt="" class="img-thumbnail">
+				        			<?php
+				        				if(!isset($_SESSION["userinfo"])) {
+				        					echo 'Login';
+				        				}
+				        				else {
+				        					echo '<img class="no-margin" height="30" src="'.$_SESSION["thumbnail"].'" alt="" class="img-thumbnail">';
+				        				}
+				        			?>
+				        			
 				        			<span class="caret"></span>
 				        		</a>
 				        		<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -120,7 +154,9 @@ if(!(isset($_SESSION["valid"]))) {
 				        </ul>
 		  		  </div>
 				</div>
-			</div>			
+				
+			</div>	
+
 			<div ng-view></div>
 			<!-- <div id="footer" ng-hide="page=='play'">
 				<div class="container" style="text-align:center">			
@@ -132,6 +168,7 @@ if(!(isset($_SESSION["valid"]))) {
 					</div>
 				</div>
 			</div> -->
+
 		</div>		
 	</div>	
 

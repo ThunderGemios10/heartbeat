@@ -28,6 +28,7 @@ html, body {
       body {
         height: 100%;
         /* The html and body elements cannot have any padding or margin. */
+        margin-bottom:-300px;
       }
 
       /* Wrapper for page content to push down footer */
@@ -165,6 +166,13 @@ code {
 	width:100%;
 	display:block;
 }
+.hideOverflow-2 {
+	overflow:hidden;
+	/*white-space:nowrap;*/
+	text-overflow:ellipsis;
+	width:100%;
+	display:block;
+}
 
 .ellipsis {
 	overflow: hidden;
@@ -206,7 +214,9 @@ code {
 	background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
 	background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white); 
 }
-
+.ellipsis-sm {
+	height:23px !important;
+}
 .descShort {
 	font-size:12px !important;
 }
@@ -314,6 +324,9 @@ ul, li{
 }
 .color-grey {
 	color:#333 !important;
+}
+.color-grey-2 {
+	color:#777 !important;
 }
 .color-green {
 	color:#4cae4c !important;
@@ -610,6 +623,9 @@ color:#ffffff !important;
 .has-padding-top-sm {
 	padding-top:12px !important;
 }
+.has-padding-bottom-sm {
+	padding-bottom:12px !important;
+}
 .has-padding-vertical {
 	padding-top:12px !important;
 	padding-bottom:12px !important;
@@ -900,6 +916,9 @@ html, body {
 	margin-top:5px !important;
 	margin-bottom:5px !important;
 }
+.margin-left-negative-sm {
+	margin-left:-5px !important;
+}
 .text-ranked {
 	color:blue;
 }
@@ -916,9 +935,7 @@ html, body {
 .group-row {
 	height:100px !important;
 }
-.color-grey{
-	color:#333;
-}
+
 .color-white{
 	color:#fff;
 }
@@ -1065,6 +1082,7 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
 }
 
 
+
 * {
 margin: 0;
 }
@@ -1076,4 +1094,78 @@ min-height: 100%;
 height: auto !important;
 height: 100%;
 margin: 0 auto -4em;
+}
+
+
+
+
+
+
+
+
+
+.no-highlight:focus, .no-highlight input:focus {
+    outline: none !important;
+    outline-color: orange !important;
+}
+.default-width-search {
+	width:500px !important;
+}
+.hover-color-grey:hover {
+	background-color: #ebebeb !important;
+}
+.search-btn {
+	/*height:28px !important;*/
+	min-width:56px !important;
+}
+.filter-btn {
+	min-width:90px !important;
+}
+
+
+
+.depth {
+	display: block;
+    /*padding: 50px;*/
+    color: black;
+    font: bold 2em Arial, sans-serif;
+    position: relative;
+}
+.depth:before, .depth:after {
+    content: attr(title);
+    /*padding: 50px;*/
+    color: rgba(255,255,255,.1);
+    position: absolute;
+}
+.depth:before { top: 1px; left: 1px }
+.depth:after  { top: 2px; left: 2px }
+
+
+
+.highlight-red {
+	border:1px red solid !important;
+	color:1px red solid !important;
+}
+.bold {
+	font-weight: bold;
+}
+
+ {
+
+}
+.with-close-btn {
+    width:100px;
+    height:100px;
+    background:#777;
+}
+.with-close-btn .close-btn{
+    display:block;
+    float:right;
+    width:30px;
+    height:29px;
+    /*background:url(http://digitalsbykobke.com/images/close.png) no-repeat center center;*/
+}
+
+.hovered-grey {
+	background-color:#eee;
 }

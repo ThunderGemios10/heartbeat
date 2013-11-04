@@ -143,7 +143,7 @@
 				</table>				
 			</div>		
 			<div class="container col-lg-12" ng-show="showAdd==true">
-				<form action="" ng-submit="saveTag(newTag)" name="addTag">				
+				<form action="" ng-submit="saveTag(newTag)" name="addTag">
 					<table class="table table-bordered no-margin">
 						<thead>
 							<tr>

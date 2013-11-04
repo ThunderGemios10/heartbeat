@@ -1,4 +1,7 @@
 function dbViewController($scope, $window, $location, databaseService, $rootScope, $routeParams, $http, DataService, sessionService, $filter, $resource) {
+	if(!$routeParams.keyword) {
+		$location.path('!/dashboard').replace();
+	}
 	$scope.ytLinkVideo = DataService.ytLink_video;
 	$scope.ytLinkChannel = DataService.ytLink_channel;
 	$scope.currentPage = 1;
@@ -7,9 +10,10 @@ function dbViewController($scope, $window, $location, databaseService, $rootScop
 	$scope.username = "";
 	$scope.useremail = "";
 	$scope.paginated = 0;
-	$rootScope.page = "list";
+	$rootScope.page = "dbsearch";
 	$scope.showMore = false;
 	$scope.searchFor = $routeParams.keyword;
+	
 	$scope.setPage = function (pageNo) {
 		$scope.currentPage = pageNo;
 	};

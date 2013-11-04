@@ -3,7 +3,7 @@ ini_set('max_execution_time', 3000);
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata); //convert the JSON to php object
-
+require 'arrToCSV.php';
 function queryVideos($ids){
 	require 'include/oauth_instance.php';
 	$csv_ids = generateCsv($ids);
@@ -13,8 +13,8 @@ function queryVideos($ids){
 
 if(isset($request->ids)) {
 	$ids = $request->ids;
-	try {		
-		require 'arrToCSV.php';
+	try {
+		
 		//get vid/listid from the URL provided in the $idList array
 		// $index = 0;
 		// foreach($ids as $i)
@@ -70,41 +70,96 @@ if(isset($request->ids)) {
 	   echo htmlspecialchars($e->getMessage());
 	  }
 }
-else if (isset($request->query) && isset($request->maxResults)) {
-	$q = $request->query;
-	$max = $request->maxResults;
-	$pageToken = $request->pageToken;
+else if (isset($request->query) && isset($request->maxResults) && isset($request->withDetails)) {
+	if($request->withDetails) {
+		$q = $request->query;
+		$max = $request->maxResults;
+		$pageToken = isset($request->pageToken)?$request->pageToken:null;
+		
+		try {
+			require 'include/oauth_instance.php';
+			if($pageToken!=""||$pageToken!=null) {
+				$searchResponse["epic"] = $request->pageToken;
+				$searchResponse = $youtube->search->listSearch('id', array(
+					'q' => $q
+					,'type' => 'video'
+					,'maxResults' => $max
+					,'pageToken' => $pageToken
+					,'fields' => 'items(id),prevPageToken,nextPageToken,pageInfo'
+				));
+			}
+			else {
+				
+				$searchResponse = $youtube->search->listSearch('id', array(
+					'q' => $q
+					,'type' => 'video'
+					,'maxResults' => $max	
+					,'fields' => 'items(id),prevPageToken,nextPageToken,pageInfo'
+				));
+			}	
+
+			$arrIds = array();
+			foreach ($searchResponse['items'] as $item) {
+				array_push($arrIds, $item["id"]["videoId"]);
+				// var_dump($item);
+			}
+
+			$searchResponse["items"] = queryVideos($arrIds);
+			echo json_encode($searchResponse);			
+		} catch (Google_ServiceException $e) {
+			$htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage()));
+		} catch (Google_Exception $e) {
+			$htmlBody .= sprintf('<p>An client error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage()));
+		}	
+	}
+	else {				
+		$q = $request->query;
+		$max = $request->maxResults;
+		$pageToken = $request->pageToken;		
+		try {
+			require 'include/oauth_instance.php';
+			if($pageToken!=""||$pageToken!=null) {
+				$searchResponse = $youtube->search->listSearch('id,snippet', array(
+					'q' => $q
+					,'type' => 'video'
+					,'maxResults' => $max
+					,'pageToken' => $pageToken
+					,'fields' => 'items(id,snippet(title,publishedAt,description,thumbnails,channelTitle)),prevPageToken,nextPageToken,pageInfo'
+				));
+			}
+			else {
+				$searchResponse = $youtube->search->listSearch('id,snippet', array(
+					'q' => $q
+					,'type' => 'video'
+					,'maxResults' => $max	
+					,'fields' => 'items(id,snippet(title,publishedAt,description,thumbnails,channelTitle)),prevPageToken,nextPageToken,pageInfo'
+				));
+			}	
+
+			echo json_encode($searchResponse);
+		} catch (Google_ServiceException $e) {
+			$htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage()));
+		} catch (Google_Exception $e) {
+			$htmlBody .= sprintf('<p>An client error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage()));
+		}	
+	}
 	
-  // Call set_include_path() as needed to point to your client library.
-	try {
+	
+	
+}
+else if(isset($_GET["videoId"])) {
 	require 'include/oauth_instance.php';
-	// if(false);
-	if($pageToken!=""||$pageToken!=null) {
-		$searchResponse = $youtube->search->listSearch('id,snippet', array(
-			'q' => $q
-			,'type' => 'video'
-			,'maxResults' => $max
-			,'pageToken' => $pageToken
-			,'fields' => 'items(id,snippet(title,publishedAt,description,thumbnails,channelTitle)),prevPageToken,nextPageToken,pageInfo'
-		));
+	$arrId = array($_GET["videoId"]);
+	$response = queryVideos($arrId);
+	if(isset($_GET["beautify"])) {
+		echo "<pre>". print_r($response[0],true)."</pre>";
 	}
-	else {
-		$searchResponse = $youtube->search->listSearch('id,snippet', array(
-			'q' => $q
-			,'type' => 'video'
-			,'maxResults' => $max	
-			,'fields' => 'items(id,snippet(title,publishedAt,description,thumbnails,channelTitle)),prevPageToken,nextPageToken,pageInfo'
-		));
-	}
-	echo json_encode(($searchResponse));
-	
-	} catch (Google_ServiceException $e) {
-		$htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
-		htmlspecialchars($e->getMessage()));
-	} catch (Google_Exception $e) {
-		$htmlBody .= sprintf('<p>An client error occurred: <code>%s</code></p>',
-		htmlspecialchars($e->getMessage()));
-	}
+	else 
+		echo json_encode($response[0],JSON_NUMERIC_CHECK);
 }
 else if(isset($request->feed)) {
 	

@@ -12,7 +12,7 @@ function ranklaterController($scope, $timeout, $location, $rootScope, $filter, s
             return "Ranked";
         }
         else {
-            return "Rank this";
+            return "Rank now";
         }
     }
     $scope.timeago = function(dated){

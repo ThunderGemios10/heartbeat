@@ -2,7 +2,8 @@
 <div class="col-md-7 pull-left">
 	<div class="">
 		<div class="container accordion boxed">
-			<h3 class="pull-left">News Feed</h3>
+			<!-- <h3 class="pull-left depth">sNews Feed</h3> -->
+			<h3 class="pull-left" title="News Feed">News Feed</h3>
 			<div class="has-margin-h3 pull-right">
 				<button type="button" popover="Rank a video" popover-trigger="mouseenter" popover-placement="left" class="btn btn-default accordion-toggle" data-toggle="collapse" data-parent="#accordion_detailedview" href="#collapse_1">
 				    <span class="glyphicon glyphicon-arrow-up"></span>
