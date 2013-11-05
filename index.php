@@ -115,6 +115,7 @@ if(!(isset($_SESSION["valid"]))) {
 					
 				</section> -->
 			</div>
+			
 	 ';
 	 include 'footer.php';
 	// require 'index-signedin.php';
