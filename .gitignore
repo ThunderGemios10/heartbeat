@@ -1,2 +1,3 @@
 model/connection.php
 apirequest/include/oauth_instance.php
+uploads/

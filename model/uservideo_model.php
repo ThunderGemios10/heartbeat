@@ -97,18 +97,23 @@ function getRankLaterByUser($value='') {
 	';
 	// echo $query;
 	$result = mysql_query($query);
-	$returnArr = array();
-	$return = array();
-	$contents = array();
-	while($row = mysql_fetch_assoc($result)) {
-		$contents = file_get_contents('http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/video_mongomodel.php?vid='.$row["videoId"]);
-		$returnArr["videoInfo"] = json_decode($contents);
-		$returnArr["dateModified"] = $row["dateModified"];
-		$returnArr["status"] = $row["status"];
-		$returnArr["ranked"] = isset($row["id"])?true:false;
-		array_push($return, $returnArr);
+	if($result) {
+		$returnArr = array();
+		$return = array();
+		$contents = array();
+		while($row = mysql_fetch_assoc($result)) {
+			$contents = file_get_contents('http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/video_mongomodel.php?vid='.$row["videoId"]);
+			$returnArr["videoInfo"] = json_decode($contents);
+			$returnArr["dateModified"] = $row["dateModified"];
+			$returnArr["status"] = $row["status"];
+			$returnArr["ranked"] = isset($row["id"])?true:false;
+			array_push($return, $returnArr);
+		}
+		return $return;
 	}
-	return $return;
+	else {
+		return array("err"=>"empty");
+	}
 }
 
 if(isset($request->getRanked)) {	
