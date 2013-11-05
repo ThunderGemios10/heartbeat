@@ -17,7 +17,7 @@ if(!(isset($_SESSION["valid"]))) {
 						<div class="col-lg-6">
 							<div class="message">
 								<div class="message-header">
-									<p><img src="images/hb-logo-coa.png"> Heart<span>beat</span></p>
+									<p><img src="images/heartbeat-logo-new.png"> Heart<span>beat</span></p>
 								</div>
 								<div class="message-subtitle">
 									<p>Dating for YouTubers!</p>

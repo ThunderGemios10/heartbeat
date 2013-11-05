@@ -1,0 +1,96 @@
+[08-Oct-2013 08:14:24 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home/anytv/public_html/heartbeat.tm/model/connection.php on line 8
+[08-Oct-2013 08:43:06 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home/anytv/public_html/heartbeat.tm/model/connection.php on line 8
+[08-Oct-2013 12:01:27 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home/anytv/public_html/heartbeat.tm/model/connection.php on line 8
+[08-Oct-2013 12:02:14 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home/anytv/public_html/heartbeat.tm/model/connection.php on line 8
+[08-Oct-2013 12:02:20 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home/anytv/public_html/heartbeat.tm/model/connection.php on line 8
+[08-Oct-2013 12:02:44 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home/anytv/public_html/heartbeat.tm/model/connection.php on line 8
+[08-Oct-2013 12:03:00 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home/anytv/public_html/heartbeat.tm/model/connection.php on line 8
+[11-Oct-2013 00:40:37 UTC] PHP Fatal error:  Uncaught exception 'Google_ServiceException' with message 'Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails&mine=true&key=AIzaSyBMZjhXBUArLrLMwsfrltMMi-9RBhHMnA4: (401) Unauthorized' in /home/anytv/public_html/heartbeat.tm/apirequest/include/google-api-php-client/src/io/Google_REST.php:66
+Stack trace:
+#0 /home/anytv/public_html/heartbeat.tm/apirequest/include/google-api-php-client/src/io/Google_REST.php(36): Google_REST::decodeHttpResponse(Object(Google_HttpRequest))
+#1 /home/anytv/public_html/heartbeat.tm/apirequest/include/google-api-php-client/src/service/Google_ServiceResource.php(186): Google_REST::execute(Object(Google_HttpRequest))
+#2 /home/anytv/public_html/heartbeat.tm/apirequest/include/google-api-php-client/src/contrib/Google_YouTubeService.php(142): Google_ServiceResource->__call('list', Array)
+#3 /home/anytv/public_html/heartbeat.tm/login.php(31): Google_ChannelsServiceResource->listChannels('id,snippet,cont...', Array)
+#4 {main}
+  thrown in /home/anytv/public_html/heartbeat.tm/apirequest/include/google-api-php-client/src/io/Google_REST.php on line 66
+[11-Oct-2013 00:40:43 UTC] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error fetching OAuth2 access token, message: 'invalid_grant'' in /home/anytv/public_html/heartbeat.tm/apirequest/include/google-api-php-client/src/auth/Google_OAuth2.php:115
+Stack trace:
+#0 /home/anytv/public_html/heartbeat.tm/apirequest/include/google-api-php-client/src/Google_Client.php(127): Google_OAuth2->authenticate(Array, NULL)
+#1 /home/anytv/public_html/heartbeat.tm/login.php(16): Google_Client->authenticate()
+#2 {main}
+  thrown in /home/anytv/public_html/heartbeat.tm/apirequest/include/google-api-php-client/src/auth/Google_OAuth2.php on line 115
+[04-Nov-2013 13:55:48 UTC] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home/anytv/public_html/heartbeat/www.heartbeat.tm/index.php:3) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/index.php on line 6
+[04-Nov-2013 14:06:38 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'anytv_robert'@'localhost' (using password: YES) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php on line 9
+[04-Nov-2013 14:07:12 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'anytv_robert'@'localhost' (using password: YES) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php on line 9
+[04-Nov-2013 14:08:43 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'anytv_robert'@'localhost' (using password: YES) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php on line 9
+[04-Nov-2013 14:08:45 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'anytv_robert'@'localhost' (using password: YES) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php on line 9
+[04-Nov-2013 14:09:27 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'anytv_robert'@'localhost' (using password: YES) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php on line 9
+[04-Nov-2013 14:09:30 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'anytv_robert'@'localhost' (using password: YES) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php on line 9
+[04-Nov-2013 14:09:51 UTC] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Access denied for user 'anytv_robert'@'localhost' (using password: YES) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php on line 9
+[04-Nov-2013 14:09:55 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php:9) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/apirequest/include/google-api-php-client/src/auth/Google_OAuth2.php on line 120
+[04-Nov-2013 14:10:12 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php:9) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/apirequest/include/google-api-php-client/src/auth/Google_OAuth2.php on line 120
+[04-Nov-2013 14:12:28 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/anytv/public_html/heartbeat/www.heartbeat.tm/model/connection.php:9) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/apirequest/include/google-api-php-client/src/auth/Google_OAuth2.php on line 120
+[04-Nov-2013 14:18:47 UTC] PHP Warning:  session_start() [<a href='function.session-start'>function.session-start</a>]: Cannot send session cache limiter - headers already sent (output started at /home/anytv/public_html/heartbeat/www.heartbeat.tm/index.php:3) in /home/anytv/public_html/heartbeat/www.heartbeat.tm/index.php on line 6
+[05-Nov-2013 05:42:44 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  '' (ASCII=8) state=0 in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 33
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 34
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 34
+[05-Nov-2013 05:42:45 UTC] PHP Warning:  Unexpected character in input:  ' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 34
+[05-Nov-2013 05:42:45 UTC] PHP Parse error:  syntax error, unexpected '*' in /home/anytv/public_html/heartbeat/www.heartbeat.tm/login.php on line 34

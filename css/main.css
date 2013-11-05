@@ -1169,3 +1169,10 @@ margin: 0 auto -4em;
 .hovered-grey {
 	background-color:#eee;
 }
+
+.groupvideos {
+	padding:15px 0px 15px 0px !important;
+	
+	height:165px;
+	width:218px;
+}
