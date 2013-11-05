@@ -26,6 +26,7 @@
     					</form>
 
     					<p class="navbar-text pull-right">
+                            
     						<a id="explore" href="#lt-pulse" class="navbar-link">Explore</a>    				
     					</p>
     				</div>
