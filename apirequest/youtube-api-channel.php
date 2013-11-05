@@ -13,10 +13,13 @@ function getVideosFromPlaylist($playlistId){
         'maxResults' => 50,
         'fields' => 'items(snippet(publishedAt,channelId,title,description,thumbnails,resourceId)),pageInfo,nextPageToken'
     ));        
+   $searchFinalResponse = array();            
+    $searchFinalResponse['items'] = array();
     $temp = array();        
     $start =0;
     $limit = 50;
     $loops = $searchResponse['pageInfo']['totalResults']/$limit;        
+    // var_dump($searchResponse);
     if(isset($searchResponse['nextPageToken']))
     {
         $pToken = $searchResponse['nextPageToken'];    
