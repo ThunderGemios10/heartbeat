@@ -12,7 +12,7 @@
     						<span class="icon-bar"></span>
     					</button>		
       						<a class="navbar-brand" href="#">
-    							<img src="images/heartbeat-logo.png">
+    							<img src="images/heartbeat-logo-new.png">
     							Heart<span>beat<span></span></span>
     						</a>
 
@@ -26,9 +26,7 @@
     					</form>
 
     					<p class="navbar-text pull-right">
-    						<a id="explore" href="#lt-pulse" class="navbar-link">Explore</a>
-    						<a href="#" class="navbar-link">YouTubers</a>
-    						<a href="logout.php" class="navbar-link">Log-out</a>
+    						<a id="explore" href="#lt-pulse" class="navbar-link">Explore</a>    				
     					</p>
     				</div>
     			</div>
