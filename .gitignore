@@ -1,3 +1,2 @@
-
-/model/connection.php
-/apirequest/include/oauth_instance.php
+model/connection.php
+apirequest/include/oauth_instance.php

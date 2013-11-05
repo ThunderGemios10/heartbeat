@@ -1,7 +1,4 @@
 <?php
-	// header('Cache-Control: private, max-age=0');
-	// header('Expires: -1');
-	// header('Content-Type: text/html; charset=UTF-8');
 	session_start();
 	if(isset($_SESSION["valid"])) {		
 		header("location: home.php");
