@@ -8,7 +8,7 @@
 			<div class="container boxed no-padding no-margin has-padding-vertical">				
 				<h4 class="container boxed-bottom has-padding-sm">Rank Later Videos</h4>
 				<div ng-mouseover="video.hovered=true" ng-mouseleave="video.hovered=false" class="container no-padding-left" ng-repeat="video in ranklist | orderBy:'dateModified':true" ng-init="video.videoInfo = video.videoInfo.videoInfo">
-					<pre>{{video|json}}</pre>
+					<!-- <pre>{{video|json}}</pre> -->
 					<div ng-show="video.videoInfo" class="container col-md-9 has-padding-vertical boxed-bottom">
 						<div class="col-md-3 no-padding no-margin medium-height">
 							<a title="Play/Rate Video!" href="#!/play/{{video.videoId}}"><img class="img-responsive" ng-src="{{video.videoInfo.snippet.thumbnails.medium.url}}" width="180"></img></a>				
