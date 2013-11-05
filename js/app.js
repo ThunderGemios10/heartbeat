@@ -654,7 +654,7 @@ videoTrackApp.directive('sidebarNav', ['databaseService', function (databaseServ
       	databaseService.getGroups().then(function(result){
       		// // console.log('sidebarNav');
       		scope.groups = result;
-      		console.log(scope.groups);
+      		// console.log(scope.groups);
       		
       	});
       	// // console.log(scope.getGroups());
