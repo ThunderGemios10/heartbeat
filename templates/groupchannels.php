@@ -136,15 +136,31 @@
 
 					 	</td>
 					 	<td ng-show="showTab=='videos'" ng-init="video.hovered=false">
-					  		<div class="col-md-3 has-padding-vertical" ng-repeat="video in videoList | filter:keyword | orderBy:'id':true" ng-show="video.videoId">
+					  		<!-- <div class="col-md-3 has-padding-vertical" ng-repeat="video in videoList | filter:keyword | orderBy:'id':true" ng-show="video.videoId">
 					  			<img ng-src="{{video.videoInfo.snippet.thumbnails.medium.url}}" width="160" height="150"></img>
 								<div class="ellipsis">
 									<div>
 										<p><bold><a title="{{video.videoInfo.snippet.title}}" href="#!/play/{{video.videoId}}">{{video.videoInfo.snippet.title}}</a></bold></p>	
 									</div>
 								</div>
-					  		</div>		
-
+					  		</div>		 -->
+					  		<div class="container">
+						  		<div class="container col-md-3 pull-left" ng-repeat="video in videoList | filter:keyword | orderBy:'id':true" ng-class="{'active':'video.videoInfo.id==activeVideo.videoInfo.id'}" ng-show="video.videoInfo.id">
+									<a href="#!/play/{{video.videoInfo.id}}" title="Click thumbnail to play video"><img ng-src="{{video.videoInfo.snippet.thumbnails.medium.url}}" width="180"></img></a>
+									<div class="ellipsis">
+										<div>
+											<p><a title="{{video.videoInfo.snippet.title}}" href="#!/play/{{video.videoInfo.id}}">{{video.videoInfo.snippet.title}}</a></p>	
+										</div>
+									</div>
+									<small>
+										<ul class="metaInfo">
+											<li><span>{{timeago(video.videoInfo.snippet.publishedAt)}} </span></li>
+											<li>&bull; <span>{{video.videoInfo.statistics.viewCount | number}} Views</span></li>
+										</ul>
+										<!-- <p><span class="hideOverflow descShort">{{video.videoInfo.snippet.description}}</span></p> -->
+									</small>
+								</div>
+							</div>
 					 	</td>
 					 	<!-- <pre>{{videoList | json}}</pre> -->
 					  	<!-- <td class="col-md-3">							  		

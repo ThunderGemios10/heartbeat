@@ -1,4 +1,8 @@
 function groupMaintenanceController($scope, $window, $q, $upload, utility, $location, databaseService, $rootScope, $routeParams, $http, DataService, sessionService, $filter, $resource) {
+	$scope.timeago = function(dated){
+        var date = humanized_time_span(dated);
+        return date;
+    }
 	$scope.refresh = function (argument) {
 		databaseService.getGroups().then(function(result){
 			$scope.createdGroup = result;

@@ -308,15 +308,15 @@ else if(isset($request->vid)){
 }
 else {	
 	// $searchText = isset($_GET["searchText"])?$_GET["searchText"]:'';
-	$randNum = rand(10, $collectionVideo->count());
-	echo $randNum;
-	$cursor = $collectionVideo->find(array(),array("videoInfo"=>1,"videoId"=>1))->limit(10)->skip($randNum);		
-	$convertedObj = array();
-	foreach ($cursor as $doc) {
-		array_push($convertedObj,$doc);
-		echo '<hr/><pre>' . print_r($doc,true) . "</pre>"; 		
-	}
-	echo "<hr/>";
+	// $randNum = rand(10, $collectionVideo->count());
+	// echo $randNum;
+	// $cursor = $collectionVideo->find(array(),array("videoInfo"=>1,"videoId"=>1))->limit(10)->skip($randNum);		
+	// $convertedObj = array();
+	// foreach ($cursor as $doc) {
+	// 	array_push($convertedObj,$doc);
+	// 	echo '<hr/><pre>' . print_r($doc,true) . "</pre>"; 		
+	// }
+	// echo "<hr/>";
 
 	// $regexObj = new MongoRegex("/^".$searchText."/i"); 
 	// echo "Collection - Search - \" ".$searchText." \"";
@@ -344,16 +344,16 @@ else {
 		$i++;		
 	}
 	echo "<hr/>";
-	echo "Collection - Authuser";
-	$i = 1;
-	$cursor = $collectionAuthuser->find();
-	$convertedObj = array();
-	foreach ($cursor as $doc) {
-		array_push($convertedObj,$doc);
-		echo '<hr/>'.$i.'<pre>' . print_r($doc,true) . "</pre>"; 
-		$i++;		
-	}	
-	echo json_encode($convertedObj);
+	// echo "Collection - Authuser";
+	// $i = 1;
+	// $cursor = $collectionAuthuser->find();
+	// $convertedObj = array();
+	// foreach ($cursor as $doc) {
+	// 	array_push($convertedObj,$doc);
+	// 	echo '<hr/>'.$i.'<pre>' . print_r($doc,true) . "</pre>"; 
+	// 	$i++;		
+	// }	
+	// echo json_encode($convertedObj);
 }
 
 ?>

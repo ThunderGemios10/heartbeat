@@ -1,4 +1,4 @@
-	<?php session_start();?>
+<?php session_start();?>
 		<div sidebar-nav active="" col="2"></div>
 		<div class="col-md-10 pull-left">			
 			<div>
