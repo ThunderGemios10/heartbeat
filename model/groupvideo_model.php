@@ -183,72 +183,21 @@ function getGroupVideoCount($groupId) {
 				tbl_videoreference VRF
 					WHERE groupId = "'.$groupId.'"
 	';
+	echo $query;
 	$result = mysql_query($query);
 	$row = mysql_fetch_assoc($result);
 	return $row;
 }
 function insertVideos($inserts) {
+	global $collectionVideo;
 	$doc = (array)$inserts;
 	//ID			
-	$videoId = $doc["videoId"];			
-	//TAGS INFO
-	if(isset($doc["rating"])) {
-		// $docTagsInfo["rating"] = isset($doc["rating"])?$doc["rating"]:'';
-		$docTagsInfo["note"] = isset($doc["note"])?$doc["note"]:'';
-		$docTagsInfo["username"] = isset($doc["username"])?$doc["username"]:'';
-		$docTagsInfo["useremail"] = isset($doc["useremail"])?$doc["useremail"]:'';
-		$docTagsInfo["postdate"] = new MongoDate();				
-		if(isset($doc["rating"]))
-			// $docTags = array('tag'=>$docTagsInfo["rating"],'count'=>1);
-			if(is_array($doc["rating"])) {
-				foreach($doc["rating"] as $docRate){
-					array_push($docTagsInfo,$docRate);
-				}	
-			}
-			else {
-				array_push($docTagsInfo,$doc["rating"]);
-			}		
+	$videoId = $doc["id"];
+	if($collectionVideo->findOne(array("videoId"=>$videoId))) {
+	
 	}
 	else {
-		// $docTagsInfo["rating"] = isset($doc["rating"])?$doc["rating"]:'';
-		$docTagsInfo["note"] = isset($doc["note"])?$doc["note"]:'';
-		$docTagsInfo["username"] = isset($doc["username"])?$doc["username"]:'';
-		$docTagsInfo["useremail"] = isset($doc["useremail"])?$doc["useremail"]:'';
-		$docTagsInfo["postdate"] = new MongoDate();
-		// $docTags = array('tag'=>$docTagsInfo["rating"],'count'=>1);
-	}
-	//VIDEO INFO
-
-	$docVideoInfo["snippet"] = (array)$doc["snippet"];
-	$docVideoInfo["statistics"] = (array)$doc["statistics"];
-	
-	//DASHBOARD INFO
-	$docDashboardInfo["statistics"] = isset($doc["dashboardInfo"])?(array)$doc["dashboardInfo"]:array();
-	
-	//CURRENT DATE
-	$today = date("Y-m-d H:i:s"); //current date
-	
-	// $collectionVideo->findOne();
-	if($collectionVideo->findOne(array("videoId"=>$videoId))) {
-		if($collectionVideo->update(array("videoId"=>$videoId), array(
-			'$addToSet'=>array(
-				'tagsInfo'=>$docTagsInfo
-				,'dashboardInfo'=>$docDashboardInfo
-			)
-		))) return "true";
-		else "false";
-	}
-	else {//"tags"=>array($docTags), "comments"=>array($docTagsInfo),  ----> removed temporarily
-		// $collectionVidStat->save(array("videoId"=>$videoId,"infoInstance"=>array($docVideoInfo)));
-		$collectionVidStat->save(array("videoId"=>$videoId,"infoInstance"=>array($docVideoInfo)));
-		if($collectionVideo->save(array("videoId"=>$videoId, "comments"=>array(), "videoInfo"=>$docVideoInfo,"dashboardInfo"=>array($docDashboardInfo)))) {
-			// $cursor = $collectionVideo->find(array("videoId"=>$videoId));
-			// $convertedObj = array();
-			// foreach ($cursor as $qwe) {
-				// array_push($convertedObj,$qwe);										
-			// }
-			// var_dump($convertedObj);
-			// var_dump($doc);
+		if($collectionVideo->save(array("videoId"=>$videoId, "videoInfo"=>$doc))) {		
 			return "true";
 		}
 		else return "false";
@@ -299,8 +248,13 @@ function getVideos($value='') {
 	// echo $query;
 	while($row = mysql_fetch_assoc($result)){
 		$video =  getLocalVideoById($row["videoId"]);
+		// echo '1\n';
+		// var_dump($video);
+		// print_r("\n\n\n");
+		// echo '1\n';
 		// var_dump(expression)
-		if(isset($video['err'])) {
+		if(sizeof($video)<=0) {
+			// echo '2\n'
 			$contents = file_get_contents('http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/../apirequest/youtube-api-video.php?videoId='.$row["videoId"]);
 			$jsonresult = json_decode($contents);
 			if(isset($jsonresult->id)) {
