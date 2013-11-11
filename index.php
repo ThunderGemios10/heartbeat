@@ -14,18 +14,22 @@ if(!(isset($_SESSION["valid"]))) {
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-3"></div>
-						<div class="col-lg-6">
-							<div class="message">
+						<div class="col-lg-6" style="background-color: rgba(0, 0, 0, 0.2);padding-bottom: 44px;">
+							<div class="message" style="padding-top:16%;background-color: transparent;">
 								<div class="message-header">
 									<p><img src="images/heartbeat-logo-new.png"> Heart<span>beat</span></p>
 								</div>
 								<div class="message-subtitle">
-									<p>Dating for YouTubers!</p>
+									<p>Dating for YouTubers!
+									<br/>
+										<span style="font-size:70%;margin-bottom:8px;margin-top:64px;display:block">(Not boyfriend/girlfriend dating, the other kind) </span>
+										<a id="explore2" href="" scrollto="#lt-pulse" class="btn btn-default btn-lg btn-lrn">Learn more</a>
+										<a href="sneakpeek.php" class="btn btn-default btn-lg btn-lrn">v2.0 Sneak peek</a>
+									</p>									
 								</div>
-								<div class="message-footer">							
-									<a id="explore2" href="" scrollto="#lt-pulse" class="btn btn-default btn-lg btn-lrn">Learn more</a>					
+								<div class="message-footer" style="text-align:center">								
 									<a href="login.php" class="btn btn-default btn-lg btn-gplus">Sign in with Google+</a> 
-									<a href="sneakpeek.php" class="btn btn-default btn-lg btn-lrn">Sneak peek</a>			
+									
 								</div>
 							</div>
 							<div class="col-lg-3"></div>
