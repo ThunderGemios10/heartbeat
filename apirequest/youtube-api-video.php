@@ -164,5 +164,8 @@ else if(isset($_GET["videoId"])) {
 else if(isset($request->feed)) {
 	
 }
-
+else {
+	session_start();
+	echo '<pre>'.print_r($_SESSION,true).'</pre>';
+}
 ?>
